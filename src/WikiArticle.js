@@ -9,6 +9,7 @@ class WikiArticle extends Component {
 		this.state = {
 			title: 'Loading...',
 			summary: 'Aenean lacinia bibendum nulla sed consectetur.',
+			image: '',
 			callbackPosition: undefined
 		};
 	}
@@ -22,7 +23,8 @@ class WikiArticle extends Component {
 		const callback = (response) => {
 			this.setState({
 				title: response.title,
-				//summary: response.text
+				//summary: response.text,
+				image: response.image
 			})
 		};
 		let callbackPosition;
@@ -42,6 +44,7 @@ class WikiArticle extends Component {
 			<div className="WikiArticle">
 				<h2>{this.state.title}</h2>
 				<p>{this.state.summary}</p>
+				<img src={this.state.image} />
 			</div>
 		);
 	}
