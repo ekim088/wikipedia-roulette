@@ -1,0 +1,48 @@
+.WikiArticle {
+	background-color: white;
+	box-shadow: 0 10px 30px -8px #bec1bd;
+	box-sizing: border-box;
+	color: #070707;
+	font-family: "proxima-nova", sans-serif;
+	font-weight: 600;
+	height: 100%;
+	line-height: 150%;
+	max-height: 700px;
+	margin: 0 auto;
+	overflow: hidden;
+	position: relative;
+	width: 80%;
+	max-width: 1200px;
+	top: 50%;
+	transform: translateY(-50%);
+	transition: all .3s ease-in-out;
+}
+
+.WikiArticle .content {
+	box-sizing: border-box;
+	float: left;
+	height: 100%;
+	padding: 60px 100px;
+	width: 50%;
+	max-width: 500px;
+	min-width: 230px;
+}
+
+.WikiArticle h2 {
+	font-family: "jaf-bernino-sans", sans-serif;
+	font-size: 34px;
+	font-weight: 700;
+	line-height: 130%;
+	margin-top: 40px;
+	margin-bottom: 50px;
+}
+
+.WikiArticle .graphic {
+	background-color: #e6e7e8;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	height: 100%;
+	overflow: hidden;
+	position: relative;
+}

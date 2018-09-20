@@ -11,7 +11,10 @@ class WikiRoulette extends Component {
 	render() {
 		return (
 			<div className="WikiRoulette">
-				<WikiArticle />
+				<div className="backdrop"></div>
+				<div className="articles">
+					<WikiArticle />
+				</div>
 			</div>
 		);
 	}

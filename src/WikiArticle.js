@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './WikiArticle.css';
 import makeApiHandler from './makeApiHandler';
 
 const WikiApiHandler = makeApiHandler();
@@ -10,8 +11,8 @@ class WikiArticle extends Component {
 			htmlStr: '',
 			title: '',
 			summary: '',
-			image: '',
-			callbackPosition: undefined
+			image: null,
+			callbackPosition: null
 		};
 	}
 
@@ -51,6 +52,7 @@ class WikiArticle extends Component {
 	 */
 	parseHtmlForSummary(htmlStr) {
 		const html = document.createElement('div');
+		const lengthMax = 300;
 		let firstPar;
 
 		// update div content with string contents
@@ -60,7 +62,9 @@ class WikiArticle extends Component {
 		firstPar = html.querySelector('p:not(.mw-empty-elt)');
 
 		if (firstPar) {
-			let summaryStr = firstPar.innerText;
+			let summaryStr = firstPar.innerText.length > lengthMax ?
+				firstPar.innerText.slice(0, lengthMax) + '...' :
+				firstPar.innerText;
 
 			// update article with summary
 			this.setState({
@@ -72,9 +76,17 @@ class WikiArticle extends Component {
 	render() {
 		return (
 			<div className="WikiArticle">
-				<h2>{this.state.title}</h2>
-				<div>{this.state.summary}</div>
-				<img src={this.state.image} />
+				<div className="content">
+					<h2 className="title">{this.state.title}</h2>
+					<p className="summary">{this.state.summary}</p>
+				</div>
+				<div
+					className="graphic"
+					style={{
+						backgroundImage: `url('${this.state.image}')`
+					}}
+				>
+				</div>
 			</div>
 		);
 	}
