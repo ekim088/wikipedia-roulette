@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './WikiRoulette.css';
+import makeApiHandler from './makeApiHandler';
+
+const WikiApiHandler = makeApiHandler()
 
 class WikiRoulette extends Component {
 	render() {
+		console.log(WikiApiHandler.getArticleById());
+
 		return (
 			<div className="WikiRoulette">
 				<header className="WikiRoulette-header">
