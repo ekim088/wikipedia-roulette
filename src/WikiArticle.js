@@ -7,8 +7,9 @@ class WikiArticle extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			title: 'Loading...',
-			summary: 'Aenean lacinia bibendum nulla sed consectetur.',
+			htmlStr: '',
+			title: '',
+			summary: '',
 			image: '',
 			callbackPosition: undefined
 		};
@@ -23,9 +24,13 @@ class WikiArticle extends Component {
 		const callback = (response) => {
 			this.setState({
 				title: response.title,
-				//summary: response.text,
 				image: response.image
 			})
+
+			// parse article content is available
+			if (response.htmlStr) {
+				this.parseHtmlForSummary(response.htmlStr);
+			}
 		};
 		let callbackPosition;
 
@@ -39,11 +44,36 @@ class WikiArticle extends Component {
 		WikiApiHandler.getArticleFromComponent(undefined, callbackPosition);
 	}
 
+	/**
+	 * Parses HTML string of Wikipedia content to generate a summary.
+	 * 
+	 * @param {string} htmlStr 
+	 */
+	parseHtmlForSummary(htmlStr) {
+		const html = document.createElement('div');
+		let firstPar;
+
+		// update div content with string contents
+		html.innerHTML = htmlStr;
+
+		console.log(html);
+		firstPar = html.querySelector('p:not(.mw-empty-elt)');
+
+		if (firstPar) {
+			let summaryStr = firstPar.innerText;
+
+			// update article with summary
+			this.setState({
+				summary: summaryStr
+			});
+		}
+	}
+
 	render() {
 		return (
 			<div className="WikiArticle">
 				<h2>{this.state.title}</h2>
-				<p>{this.state.summary}</p>
+				<div>{this.state.summary}</div>
 				<img src={this.state.image} />
 			</div>
 		);

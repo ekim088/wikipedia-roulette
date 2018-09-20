@@ -102,7 +102,10 @@ function getArticleContentComplete(response) {
 
 	if (response && response.parse) {
 		article.title = response.parse.title;
-		article.text = response.parse.text;
+		article.htmlStr = response.parse.text['*'];
+
+		// update article component with latest article information
+		performComponentCallback();
 
 		// request images for article
 		console.log(`[WikiApiHandler] Completed article content request for ${article.title}`);
@@ -169,9 +172,6 @@ function getImagesByCategoryComplete(response) {
 		if (!imgFound) {
 			console.log(`[WikiApiHandler] Could not find image for ${article.title}`);
 		}
-
-		// update article component with latest article information
-		performComponentCallback();
 	}
 }
 
