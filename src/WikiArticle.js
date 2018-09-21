@@ -40,7 +40,7 @@ class WikiArticle extends Component {
 
 			// parse article content is available
 			if (response.htmlStr) {
-				this.parseHtmlForSummary(response.htmlStr);
+				this.parseArticleHtml(response.htmlStr);
 			}
 		};
 		let callbackPosition;
@@ -56,31 +56,89 @@ class WikiArticle extends Component {
 	}
 
 	/**
-	 * Parses HTML string of Wikipedia content to generate a summary.
+	 * Parses HTML string of Wikipedia content to fit customized format.
 	 * 
 	 * @param {string} htmlStr 
 	 */
-	parseHtmlForSummary(htmlStr) {
-		const lengthMax = 300;
-		let html = document.createElement('div');
-		let firstPar;
+	parseArticleHtml(htmlStr) {
+		/**
+		 * Parses DOM element for summary content.
+		 * 
+		 * @param {Element} el Element containing article content
+		 */
+		const parseHtmlForSummary = (el) => {
+			// max length of summary content
+			const lengthMax = 300;
 
-		// update div content with string contents
+			if (typeof el !== 'object') {
+				console.log(`[WikiArticle] Invalid object - 
+					could not parse article content for summary`);
+				return;
+			}
+
+			// parse HTML content for article summary
+			// currently just grabs first paragraph contents
+			console.log(`[WikiArticle] Parsing article content for summary`);
+			let firstPar = el.querySelector('p:not(.mw-empty-elt)');
+
+			if (firstPar) {
+				let summaryStr = firstPar.innerText.length > lengthMax ?
+					firstPar.innerText.slice(0, lengthMax) + '...' :
+					firstPar.innerText;
+
+				// update article with summary
+				this.setState({ summary: summaryStr });
+			}
+		};
+
+		/**
+		 * Parses DOM element for image content.
+		 * 
+		 * @param {Element} el Element containing article content
+		 */
+		const parseHtmlForImage = (el) => {
+			const dimensionThreshold = 160000;
+			let images = html.querySelectorAll('img');
+
+			if (typeof el !== 'object') {
+				console.log(`[WikiArticle] Invalid object - 
+					could not parse article content for image`);
+				return;
+			}
+
+			console.log(`[WikiArticle] Parsing article content for image`);
+
+			// search image for one large enough to use as main article graphic
+			// compares images dimensions against a threshold
+			console.log(images);
+			for (let image of images) {
+				let height = image.getAttribute('naturalHeight');
+				let width = image.getAttribute('naturalWidth');
+
+				if (height && width && (height * width) > dimensionThreshold) {
+					// update article with image
+					let src = image.getAttribute('src');
+					console.log(`[WikiArticle] Using ${src} as image for ${this.state.title}`);
+					this.setState({ image: src });
+					return;
+				}
+			}
+
+			// if image not found in article, call Wikipedia API to attempt to grab a related image
+			console.log(this.state);
+			if (typeof this.state.title !== 'undefined' && 
+				typeof this.state.callbackPosition !== 'undefined') {
+				WikiApiHandler.getImageFromComponent(this.state.title, this.state.callbackPosition);
+			}
+		};
+
+		// create element with HTML string contents
+		let html = document.createElement('div');
 		html.innerHTML = htmlStr;
 
-		console.log(html);
-		firstPar = html.querySelector('p:not(.mw-empty-elt)');
-
-		if (firstPar) {
-			let summaryStr = firstPar.innerText.length > lengthMax ?
-				firstPar.innerText.slice(0, lengthMax) + '...' :
-				firstPar.innerText;
-
-			// update article with summary
-			this.setState({
-				summary: summaryStr
-			});
-		}
+		// parse contents
+		parseHtmlForSummary(html);
+		parseHtmlForImage(html);
 
 		// remove ref to temp element; does this actually matter?
 		html = undefined;

@@ -20,6 +20,7 @@ let article = {};
 export default function makeApiHandler() {
 	window.WikiApiHandler = window.WikiApiHandler || {
 		getArticleFromComponent: getArticleFromComponent,
+		getImageFromComponent: getImageFromComponent,
 		getRandomArticleIdComplete: getRandomArticleIdComplete,
 		getArticleContentComplete: getArticleContentComplete,
 		getImagesByCategoryComplete: getImagesByCategoryComplete,
@@ -30,7 +31,8 @@ export default function makeApiHandler() {
 }
 
 /**
- * Modifies the content of a given site's file with a desired xml content.
+ * Queries the Wikipedia API for article content. Can be called externally from
+ * React Component.
  *
  * @param {string} id The unique ID of the Wikipedia article to request, selects
  * 	a random article if undefined
@@ -45,6 +47,25 @@ function getArticleFromComponent(id, callbackPosition) {
 		getRandomArticleId();
 	} else {
 		getArticleContent(id);
+	}
+}
+
+/**
+ * Queries the Wikipedia API for an article image. Can be called externally from
+ * React Component.
+ *
+ * @param {string} category Category of image to search for
+ * @param {number} callbackPosition The position of the callback function to call
+ * 	when the request completes
+ */
+function getImageFromComponent(category, callbackPosition) {
+	if (typeof category !== 'undefined' && 
+		typeof callbackPosition !== 'undefined') {
+		// store callback function position to call when request completes
+		currentCallbackPosition = callbackPosition;
+		getImagesByCategory(category);
+	} else {
+		console.error('[WikiApiHandler] Could not initiate request for article image');
 	}
 }
 
@@ -93,7 +114,7 @@ function getArticleContent(id) {
 }
 
 /**
- * Executes on completion of article content request. Initiates request for images associated with article.
+ * Executes on completion of article content request.
  *
  * @param {Object} response The API response
  */
@@ -108,8 +129,7 @@ function getArticleContentComplete(response) {
 		performComponentCallback();
 
 		// request images for article
-		console.log(`[WikiApiHandler] Completed article content request for ${article.title}`);
-		getImagesByCategory();
+		console.log(`[WikiApiHandler] Completed article content request`);
 	} else {
 		console.error(`[WikiApiHandler] Could not retrieve article content`);
 	}
@@ -118,9 +138,9 @@ function getArticleContentComplete(response) {
 /**
  * Requests a list of images from Wikipedia associated with a category.
  *
- * @param {string} category The API response
+ * @param {string} category Category of image to search for
  */
-function getImagesByCategory(category = article.title) {
+function getImagesByCategory(category) {
 	const escapedCategory = escape(category);
 	const imgRequestUrl = `http://en.wikipedia.org/w/api.php?action=query&prop=images&format=json&titles=${escapedCategory}`;
 
@@ -138,7 +158,7 @@ function getImagesByCategoryComplete(response) {
 	let imgList;
 	let imgFound = false;
 
-	console.log(`[WikiApiHandler] Completed image list request for ${article.title}`);
+	console.log(`[WikiApiHandler] Completed image list request`);
 	onCompleteRequest();
 
 	// retrieve first list of returned images
@@ -148,6 +168,8 @@ function getImagesByCategoryComplete(response) {
 		Object.keys(response.query.pages).length > 0) {
 		let id = Object.keys(response.query.pages)[0];
 		imgList = response.query.pages[id].images;
+	} else {
+		console.warn(`[WikiApiHandler] Invalid response from getImagesByCategory() request`);
 	}
 
 	// parse image list and avoid Wikipedia icons and graphics
@@ -170,8 +192,10 @@ function getImagesByCategoryComplete(response) {
 		}
 
 		if (!imgFound) {
-			console.log(`[WikiApiHandler] Could not find image for ${article.title}`);
+			console.log(`[WikiApiHandler] Could not find image using getImagesByCategory()`);
 		}
+	} else {
+		console.warn(`[WikiApiHandler] Could not parse image list for appropriate graphic`);
 	}
 }
 
