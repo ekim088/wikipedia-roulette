@@ -97,7 +97,7 @@ class WikiArticle extends Component {
 		 * @param {Element} el Element containing article content
 		 */
 		const parseHtmlForImage = (el) => {
-			const dimensionThreshold = 160000;
+			const dimensionThreshold = 39999;
 			let images = html.querySelectorAll('img');
 
 			if (typeof el !== 'object') {
@@ -111,8 +111,8 @@ class WikiArticle extends Component {
 			// search image for one large enough to use as main article graphic
 			// compares images dimensions against a threshold
 			for (let image of images) {
-				let height = image.getAttribute('naturalHeight');
-				let width = image.getAttribute('naturalWidth');
+				let height = image.getAttribute('height');
+				let width = image.getAttribute('width');
 
 				if (height && width && (height * width) > dimensionThreshold) {
 					// update article with image
