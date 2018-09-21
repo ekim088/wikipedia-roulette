@@ -221,6 +221,9 @@ function performComponentCallback() {
 		Array.isArray(window.WikiApiHandler.articleCallbacks) &&
 		typeof window.WikiApiHandler.articleCallbacks[currentCallbackPosition] === 'function') {
 		window.WikiApiHandler.articleCallbacks[currentCallbackPosition](article);
+		
+		// reset article
+		article = {};
 	}
 }
 
