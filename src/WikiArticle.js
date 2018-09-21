@@ -8,7 +8,6 @@ class WikiArticle extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			htmlStr: '',
 			title: '',
 			summary: '',
 			image: null,
@@ -23,10 +22,21 @@ class WikiArticle extends Component {
 		 * completes
 		 */
 		const callback = (response) => {
-			this.setState({
-				title: response.title,
-				image: response.image
-			})
+			const updateObj = {};
+
+			// set up object with state values to update
+			for (let key in response) {
+				if (response.hasOwnProperty(key) &&
+					response[key] &&
+					this.state.hasOwnProperty(key)) {
+					updateObj[key] = response[key];
+				}
+			}
+
+			// update Component state
+			if (Object.keys(updateObj).length > 0) {
+				this.setState(updateObj);
+			}
 
 			// parse article content is available
 			if (response.htmlStr) {
@@ -51,8 +61,8 @@ class WikiArticle extends Component {
 	 * @param {string} htmlStr 
 	 */
 	parseHtmlForSummary(htmlStr) {
-		const html = document.createElement('div');
 		const lengthMax = 300;
+		let html = document.createElement('div');
 		let firstPar;
 
 		// update div content with string contents
@@ -71,6 +81,9 @@ class WikiArticle extends Component {
 				summary: summaryStr
 			});
 		}
+
+		// remove ref to temp element; does this actually matter?
+		html = undefined;
 	}
 
 	render() {
