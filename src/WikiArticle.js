@@ -110,7 +110,6 @@ class WikiArticle extends Component {
 
 			// search image for one large enough to use as main article graphic
 			// compares images dimensions against a threshold
-			console.log(images);
 			for (let image of images) {
 				let height = image.getAttribute('naturalHeight');
 				let width = image.getAttribute('naturalWidth');
@@ -125,7 +124,6 @@ class WikiArticle extends Component {
 			}
 
 			// if image not found in article, call Wikipedia API to attempt to grab a related image
-			console.log(this.state);
 			if (typeof this.state.title !== 'undefined' && 
 				typeof this.state.callbackPosition !== 'undefined') {
 				WikiApiHandler.getImageFromComponent(this.state.title, this.state.callbackPosition);
