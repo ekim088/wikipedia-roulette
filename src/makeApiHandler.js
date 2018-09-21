@@ -183,7 +183,8 @@ function getImagesByCategoryComplete(response) {
 				(image.title.indexOf('Ambox') === -1) &&
 				(image.title.indexOf('DAB list gray') === -1) &&
 				(image.title.indexOf('Text document') === -1) &&
-				(image.title.indexOf('Disambig gray') === -1)) {
+				(image.title.indexOf('Disambig gray') === -1) &&
+				(image.title.indexOf('.ogg') === -1)) {
 				// once a candidate img is found, make an additional API call to get the actual image file
 				imgFound = true;
 				getImageByTitle(image.title);
