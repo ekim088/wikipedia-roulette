@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './WikiArticle.css';
 import makeApiHandler from './makeApiHandler';
+import defaultImg from './default-article-image.jpg';
 
 const WikiApiHandler = makeApiHandler();
 
@@ -10,7 +11,7 @@ class WikiArticle extends Component {
 		this.state = {
 			title: '',
 			summary: '',
-			image: null,
+			image: defaultImg,
 			callbackPosition: null
 		};
 	}
