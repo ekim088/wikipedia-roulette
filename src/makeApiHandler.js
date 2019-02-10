@@ -1,280 +1,103 @@
-// Handles API calls to Wikipedia.
-
-// Stores a temporary DOM element that performs JSONP request
-let tempRequest;
-
 /**
- * Position in array window.WikiApiHandler.articleCallbacks that contains
- * function to call when article request completes. Callback function updates
- * state of Component requesting content.
+ * Defines and returns a handler that components can call to perform Wikipedia API requests.
  */
-let currentCallbackPosition;
+export const WikiApiHandler = (() => {
+	/**
+	 * Retrieves a random article from Wikipedia.
+	 * 
+	 * @returns {string} the title of a random Wikipedia article
+	 */
+	const getRandomArticle = () => new Promise(async (resolve, reject) => {
+		console.log(`[WikiApiHandler] Requesting random article`);
+		try {
+			const response = await fetch('https://en.wikipedia.org/api/rest_v1/page/random/title');
+			const responseJson = await response.json();
+			resolve(responseJson.items[0].title);
+		} catch(e) {
+			reject(e);
+		}
+	});
 
-let article = {};
+	/**
+	 * Retrieves a summary of a Wikipedia article.
+	 *
+	 * @param {string} title - The title of the Wikipedia article to request
+	 */
+	const getArticleSummary = (title) => new Promise(async (resolve, reject) => {
+		console.log(`[WikiApiHandler] Requesting article summary by title "${title}"`);
+		try {
+			const response = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${title.replace(' ', '_')}`);
+			const responseJson = await response.json();
+			resolve(responseJson);
+		} catch(e) {
+			reject(e);
+		}
+	});
 
-/**
- * Defines and returns a static WikiApiHandler that components can call
- * to perform API requests. Utilizes JSONP requests to skirt around cross
- * origin scripting issues.
- */
-export default function makeApiHandler() {
-	window.WikiApiHandler = window.WikiApiHandler || {
-		getArticleFromComponent: getArticleFromComponent,
-		getImageFromComponent: getImageFromComponent,
-		getRandomArticleIdComplete: getRandomArticleIdComplete,
-		getArticleContentComplete: getArticleContentComplete,
-		getImagesByCategoryComplete: getImagesByCategoryComplete,
-		getImageByTitleComplete: getImageByTitleComplete
-	}
+	/**
+	 * Translates raw article summary response from API to a format understood
+	 * by consuming Component.
+	 * 
+	 * @param {Object} article - Raw article summary from API
+	 * @returns {Object} Translated article data
+	 */
+	const translateArticleSummary = (summary) => {
+		console.log('[WikiApiHandler] Parsing article summary');
 
-	return window.WikiApiHandler;
-}
+		return {
+			title: summary.title,
+			summary: summary.extract_html,
+			image: summary.thumbnail
+		};
+	};
 
-/**
- * Queries the Wikipedia API for article content. Can be called externally from
- * React Component.
- *
- * @param {string} id The unique ID of the Wikipedia article to request, selects
- * 	a random article if undefined
- * @param {number} callbackPosition The position of the callback function to call
- * 	when the request completes
- */
-function getArticleFromComponent(id, callbackPosition) {
-	// store callback function position to call when request completes
-	currentCallbackPosition = callbackPosition;
+	/**
+	 * Contains a list of callback functions corresponding to each Wikipedia article
+	 * Component that can update the article's state.
+	 */
+	const articleCallbacks = [];
 
-	if (typeof id === 'undefined' || isNaN(parseInt(id))) {
-		getRandomArticleId();
-	} else {
-		getArticleContent(id);
-	}
-}
+	/**
+	 * Updates current component specified by currentCallbackPosition with information
+	 * on article object.
+	 * 
+	 * @param {number} callbackPosition - Position in array WikiApiHandler.articleCallbacks
+	 * that contains function to call when article request completes. Callback function updates
+	 * state of Component requesting content.
+	 * @param {Object} article - Article data parsed from summary API response
+	 */
+	const performComponentCallback = (callbackPosition, article) => {
+		console.log('[WikiApiHandler] Performing update on article Component');
 
-/**
- * Queries the Wikipedia API for an article image. Can be called externally from
- * React Component.
- *
- * @param {string} category Category of image to search for
- * @param {number} callbackPosition The position of the callback function to call
- * 	when the request completes
- */
-function getImageFromComponent(category, callbackPosition) {
-	if (typeof category !== 'undefined' && 
-		typeof callbackPosition !== 'undefined') {
-		// store callback function position to call when request completes
-		currentCallbackPosition = callbackPosition;
-		getImagesByCategory(category);
-	} else {
-		console.error('[WikiApiHandler] Could not initiate request for article image');
-	}
-}
-
-/**
- * Retrieves a random article ID from Wikipedia.
- */
-function getRandomArticleId() {
-	const requestIdPath = 'http://en.wikipedia.org/w/api.php?action=query&generator=random&grnnamespace=0&format=json';
-
-	console.log('[WikiApiHandler] Requesting random article ID');
-	jSONPRequest(requestIdPath, 'WikiApiHandler.getRandomArticleIdComplete');
-}
-
-/**
- * Executes on completion of random article ID request. Initiates call to
- * retrieve article content.
- * 
- * @param {Object} response The API response
- */
-function getRandomArticleIdComplete(response) {
-	onCompleteRequest();
-
-	// use first key from response data as article id
-	if (response && response.query && typeof response.query.pages === 'object') {
-		let id;
-		let ids = Object.keys(response.query.pages);
-		
-		if (ids.length > 0) {
-			id = ids[0];
-			console.log(`[WikiApiHandler] Completed random ID request with ID ${id}`);
-			getArticleContent(id);
+		if (typeof callbackPosition !== 'undefined' &&
+			Array.isArray(articleCallbacks) &&
+			typeof articleCallbacks[callbackPosition] === 'function') {
+				articleCallbacks[callbackPosition](article);
 		}
 	}
-}
 
-/**
- * Retrieves content of Wikipedia article by ID.
- *
- * @param {string} id The unique ID of the Wikipedia article to request
- */
-function getArticleContent(id) {
-	const contentRequestUrl = `http://en.wikipedia.org/w/api.php?action=parse&prop=text&format=json&pageid=${id}`;
-
-	console.log(`[WikiApiHandler] Requesting article content by ID ${id}`);
-	jSONPRequest(contentRequestUrl,'WikiApiHandler.getArticleContentComplete');
-}
-
-/**
- * Executes on completion of article content request.
- *
- * @param {Object} response The API response
- */
-function getArticleContentComplete(response) {
-	onCompleteRequest();
-
-	if (response && response.parse) {
-		article.title = response.parse.title;
-		article.htmlStr = response.parse.text['*'];
-
-		// update article component with latest article information
-		performComponentCallback();
-
-		// request images for article
-		console.log(`[WikiApiHandler] Completed article content request`);
-	} else {
-		console.error(`[WikiApiHandler] Could not retrieve article content`);
-	}
-}
-
-/**
- * Requests a list of images from Wikipedia associated with a category.
- *
- * @param {string} category Category of image to search for
- */
-function getImagesByCategory(category) {
-	const escapedCategory = escape(category);
-	const imgRequestUrl = `http://en.wikipedia.org/w/api.php?action=query&prop=images&format=json&titles=${escapedCategory}`;
-
-	console.log(`[WikiApiHandler] Requesting images associated with ${category}`);
-	jSONPRequest(imgRequestUrl, 'WikiApiHandler.getImagesByCategoryComplete');
-}
-
-/**
- * Executes upon completion of image list request. Initiates call to request a single
- * image file.
- *
- * @param {Object} response The API response
- */
-function getImagesByCategoryComplete(response) {
-	let imgList;
-	let imgFound = false;
-
-	console.log(`[WikiApiHandler] Completed image list request`);
-	onCompleteRequest();
-
-	// retrieve first list of returned images
-	if (response &&
-		response.query &&
-		response.query.pages &&
-		Object.keys(response.query.pages).length > 0) {
-		let id = Object.keys(response.query.pages)[0];
-		imgList = response.query.pages[id].images;
-	} else {
-		console.warn(`[WikiApiHandler] Invalid response from getImagesByCategory() request`);
-	}
-
-	// parse image list and avoid Wikipedia icons and graphics
-	if (Array.isArray(imgList) && imgList.length > 0) {
-		console.log(`[WikiApiHandler] Parsing image list for appropriate graphic`);
-
-		for(let image of imgList) {
-			if ((image.title.indexOf('Commons-logo') === -1) &&
-				(image.title.indexOf('Wiki letter') === -1) &&
-				(image.title.indexOf('Hexagonal Icon') === -1) &&
-				(image.title.indexOf('Ambox') === -1) &&
-				(image.title.indexOf('DAB list gray') === -1) &&
-				(image.title.indexOf('Text document') === -1) &&
-				(image.title.indexOf('Disambig gray') === -1) &&
-				(image.title.indexOf('.ogg') === -1)) {
-				// once a candidate img is found, make an additional API call to get the actual image file
-				imgFound = true;
-				getImageByTitle(image.title);
-				break;
-			}
+	/**
+	 * Queries the Wikipedia API for article content. Can be called externally from
+	 * React Component.
+	 *
+	 * @param {number} callbackPosition - Position in array WikiApiHandler.articleCallbacks
+	 * that contains function to call when article request completes. Callback function updates
+	 * state of Component requesting content.
+	 * @param {string} [title] - The title of the Wikipedia article to request, selects
+	 * a random article if undefined
+	 */
+	const getArticleFromComponent = async (callbackPosition, title) => {
+		if (typeof title === 'undefined') {
+			title = await getRandomArticle(title);
 		}
 
-		if (!imgFound) {
-			console.log(`[WikiApiHandler] Could not find image using getImagesByCategory()`);
-		}
-	} else {
-		console.warn(`[WikiApiHandler] Could not parse image list for appropriate graphic`);
-	}
-}
+		getArticleSummary(title)
+			.then((summary) => translateArticleSummary(summary))
+			.then((parsedData) => performComponentCallback(callbackPosition, parsedData));
+	};
 
-/**
- * Requests an image from Wikipedia that best matches a title.
- *
- * @param {string} category The API response
- */
-function getImageByTitle(imageTitle) {
-	const imgRequestUrl = `http://en.wikipedia.org/w/api.php?action=query&prop=imageinfo&iiprop=url&format=json&titles=${imageTitle}`;
-
-	console.log(`[WikiApiHandler] Requesting file paths for ${imageTitle} images`);
-	jSONPRequest(imgRequestUrl, 'WikiApiHandler.getImageByTitleComplete');
-}
-
-/**
- * Executes upon completion of image file request.
- *
- * @param {Object} response The API response
- */
-function getImageByTitleComplete(response) {
-	console.log(`[WikiApiHandler] Completed image file paths request`);
-	onCompleteRequest();
-
-	// parse list of images for a single file
-	if (response &&
-		response.query &&
-		response.query.pages &&
-		Object.keys(response.query.pages).length > 0) {
-		let id = Object.keys(response.query.pages)[0];
-		let img = response.query.pages[id].imageinfo[0].url;
-		article.image = img;
-	}
-
-	// update article component with latest article information
-	performComponentCallback();
-}
-
-/**
- * Updates current component specified by currentCallbackPosition with information
- * on article object.
- */
-function performComponentCallback() {
-	console.log('[WikiApiHandler] Performing update on article Component');
-
-	if (typeof currentCallbackPosition !== 'undefined' &&
-		Array.isArray(window.WikiApiHandler.articleCallbacks) &&
-		typeof window.WikiApiHandler.articleCallbacks[currentCallbackPosition] === 'function') {
-		window.WikiApiHandler.articleCallbacks[currentCallbackPosition](article);
-		
-		// reset article
-		article = {};
-	}
-}
-
-/**
- * Performs JSONP Request.
- *
- * @param {string} query The API query string to call
- * @param {string} callback The path of the method to call when JSONP method completes
- */
-function jSONPRequest(query, callback) {
-	// query currently in progress
-	if (tempRequest) {
-		return;
-	}
-
-	tempRequest = document.createElement('script');
-	tempRequest.type = 'text/javascript';
-	tempRequest.id = 'jsGetFromWikipedia';
-	tempRequest.src = `${query}&callback=${callback}`;
-	document.body.appendChild(tempRequest);
-}
-	
-/**
- * Tears down temporary objects created during JSONP request.
- */
-function onCompleteRequest() {
-	document.body.removeChild(tempRequest);
-	tempRequest = null;
-}
+	return {
+		articleCallbacks: articleCallbacks,
+		getArticleFromComponent: getArticleFromComponent
+	};
+})();

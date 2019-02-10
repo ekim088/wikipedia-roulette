@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import './WikiArticle.css';
-import makeApiHandler from './makeApiHandler';
+import { WikiApiHandler } from './makeApiHandler';
 import defaultImg from './default-article-image.jpg';
-
-const WikiApiHandler = makeApiHandler();
 
 class WikiArticle extends Component {
 	constructor(props) {
@@ -47,13 +45,12 @@ class WikiArticle extends Component {
 		let callbackPosition;
 
 		// push callback to global array
-		window.WikiApiHandler.articleCallbacks = window.WikiApiHandler.articleCallbacks || [];
-		callbackPosition = window.WikiApiHandler.articleCallbacks.length;
-		this.setState({ callbackPosition: window.WikiApiHandler.articleCallbacks.length });
-		window.WikiApiHandler.articleCallbacks.push(callback);
+		callbackPosition = WikiApiHandler.articleCallbacks.length;
+		this.setState({ callbackPosition: WikiApiHandler.articleCallbacks.length });
+		WikiApiHandler.articleCallbacks.push(callback);
 
 		// initiate call to API
-		WikiApiHandler.getArticleFromComponent(undefined, callbackPosition);
+		WikiApiHandler.getArticleFromComponent(callbackPosition);
 	}
 
 	/**
