@@ -6,12 +6,12 @@ class WikiRoulette extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			articles: [<WikiArticle />]
+			articles: [<WikiArticle key="0"/>]
 		};
 	}
 
 	appendArticle() {
-		this.setState({ articles: [ ...this.state.articles, <WikiArticle />] });
+		this.setState({ articles: [ ...this.state.articles, <WikiArticle key={this.state.articles.length}/>] });
 	}
 
 	render() {

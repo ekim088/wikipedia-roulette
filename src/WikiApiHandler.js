@@ -42,9 +42,10 @@ export const WikiApiHandler = (() => {
 	 * @returns {Object} Translated article data
 	 */
 	const translateArticleSummary = (summary) => {
-		console.log('[WikiApiHandler] Parsing article summary');
+		console.log('[WikiApiHandler] Parsing article summary', summary);
 
 		return {
+			id: summary.pageid,
 			title: summary.title,
 			summary: summary.extract_html,
 			image: summary.thumbnail && summary.thumbnail.source

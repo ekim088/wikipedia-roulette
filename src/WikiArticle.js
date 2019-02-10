@@ -7,10 +7,10 @@ class WikiArticle extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			id: null,
 			title: '',
 			summary: '',
-			image: defaultImg,
-			callbackPosition: null
+			image: defaultImg
 		};
 	}
 
