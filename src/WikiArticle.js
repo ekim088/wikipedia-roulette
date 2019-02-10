@@ -15,20 +15,19 @@ class WikiArticle extends Component {
 	}
 
 	componentWillMount() {
-		/*
-		 * define a globally accessible callback method Wiki API Handler is able
-		 * to call to be able to update this component's state when JSONP request
-		 * completes
+		/**
+		 * Initiate call to Wikipedia API. Supplying callback method to
+		 * update Component state once API requests complete.
 		 */
-		const callback = (response) => {
+		WikiApiHandler.getArticleFromComponent((articleData) => {
 			const updateObj = {};
 
 			// set up object with state values to update
-			for (let key in response) {
-				if (response.hasOwnProperty(key) &&
-					response[key] &&
+			for (let key in articleData) {
+				if (articleData.hasOwnProperty(key) &&
+					articleData[key] &&
 					this.state.hasOwnProperty(key)) {
-					updateObj[key] = response[key];
+					updateObj[key] = articleData[key];
 				}
 			}
 
@@ -38,19 +37,10 @@ class WikiArticle extends Component {
 			}
 
 			// parse article content is available
-			if (response.htmlStr) {
-				this.parseArticleHtml(response.htmlStr);
+			if (articleData.htmlStr) {
+				this.parseArticleHtml(articleData.htmlStr);
 			}
-		};
-		let callbackPosition;
-
-		// push callback to global array
-		callbackPosition = WikiApiHandler.articleCallbacks.length;
-		this.setState({ callbackPosition: WikiApiHandler.articleCallbacks.length });
-		WikiApiHandler.articleCallbacks.push(callback);
-
-		// initiate call to API
-		WikiApiHandler.getArticleFromComponent(callbackPosition);
+		});
 	}
 
 	/**

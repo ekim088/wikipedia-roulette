@@ -52,31 +52,6 @@ export const WikiApiHandler = (() => {
 	};
 
 	/**
-	 * Contains a list of callback functions corresponding to each Wikipedia article
-	 * Component that can update the article's state.
-	 */
-	const articleCallbacks = [];
-
-	/**
-	 * Updates current component specified by currentCallbackPosition with information
-	 * on article object.
-	 * 
-	 * @param {number} callbackPosition - Position in array WikiApiHandler.articleCallbacks
-	 * that contains function to call when article request completes. Callback function updates
-	 * state of Component requesting content.
-	 * @param {Object} article - Article data parsed from summary API response
-	 */
-	const performComponentCallback = (callbackPosition, article) => {
-		console.log('[WikiApiHandler] Performing update on article Component');
-
-		if (typeof callbackPosition !== 'undefined' &&
-			Array.isArray(articleCallbacks) &&
-			typeof articleCallbacks[callbackPosition] === 'function') {
-				articleCallbacks[callbackPosition](article);
-		}
-	}
-
-	/**
 	 * Queries the Wikipedia API for article content. Can be called externally from
 	 * React Component.
 	 *
@@ -86,18 +61,17 @@ export const WikiApiHandler = (() => {
 	 * @param {string} [title] - The title of the Wikipedia article to request, selects
 	 * a random article if undefined
 	 */
-	const getArticleFromComponent = async (callbackPosition, title) => {
+	const getArticleFromComponent = async (callback, title) => {
 		if (typeof title === 'undefined') {
 			title = await getRandomArticle(title);
 		}
 
 		getArticleSummary(title)
 			.then((summary) => translateArticleSummary(summary))
-			.then((parsedData) => performComponentCallback(callbackPosition, parsedData));
+			.then((parsedData) => callback(parsedData));
 	};
 
 	return {
-		articleCallbacks: articleCallbacks,
 		getArticleFromComponent: getArticleFromComponent
 	};
 })();
