@@ -43,7 +43,7 @@ class WikiArticle extends Component {
 			<div className="WikiArticle">
 				<div className="content">
 					<h2 className="title">{this.state.title}</h2>
-					<p className="summary">{this.state.summary}</p>
+					<div className="summary">{this.state.summary}</div>
 				</div>
 				<div
 					className="graphic"
