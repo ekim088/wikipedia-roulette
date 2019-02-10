@@ -47,7 +47,7 @@ export const WikiApiHandler = (() => {
 		return {
 			title: summary.title,
 			summary: summary.extract_html,
-			image: summary.thumbnail
+			image: summary.thumbnail && summary.thumbnail.source
 		};
 	};
 
