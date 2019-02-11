@@ -8,63 +8,39 @@
 }
 
 .wa {
-	border-radius: 8px;
+	border-radius: 5px;
+	box-sizing: border-box;
 	box-shadow: 0 10px 30px -8px #bec1bd;
-	color: #070707;
-	font-family: "proxima-nova", sans-serif;
-	font-weight: 600;
-	line-height: 150%;
+	height: 300px;
 	margin: 0 auto;
 	overflow: hidden;
 	position: relative;
 	transition: all .3s ease-in-out;
+	width: 500px;
 }
 
-.wa-body {
+.wa__body {
 	align-items: center;
-	background-image: linear-gradient(135deg, rgba(115,103,240,.95) 50%, rgba(206,159,252,.85) 100%);
+	background-image: linear-gradient(55deg, rgba(115,103,240,1) 40%, rgba(206,159,252,.75) 100%);
 	box-sizing: border-box;
 	color: #fff;
-	-ms-flex-direction: column;
-	flex-direction: column;
 	display: -ms-flexbox;
 	display: flex;
-	height: 300px;
-	padding: 30px;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	height: 100%;
+	padding: 20px 30px;
 	position: relative;
-	max-width: 500px;
+	width: 100%;
 }
 
-.wa-content {
+.wa__content {
 	margin: auto;
 }
 
-.wa h2 {
-	font-family: "basic-sans", sans-serif;
-	font-size: 34px;
-	font-weight: 400;
-	line-height: 110%;
-	margin: 0 0 20px;
-}
-
-.wa h3 {
-	font-family: "basic-sans", sans-serif;
-	font-size: 14px;
-	font-weight: 700;
-	letter-spacing: .5px;
-	line-height: 140%;
-	margin: 0 0 14px;
-	text-transform: uppercase;
-}
-
-.wa h2 + h3 {
-	margin-bottom: 20px;
-	margin-top: -10px;
-}
-
-.wa-img {
+.wa__img {
 	background-color: #e6e7e8;
-	background-position: center;
+	background-position: 90px -25px;
 	background-repeat: no-repeat;
 	background-size: cover;
 	filter: blur(1.5px);
@@ -73,5 +49,39 @@
 	overflow: hidden;
 	position: absolute;
 	top: 0;
+	transition: all .1s ease-in-out;
 	width: 100%;
+}
+
+.wa__title,
+.wa__subtitle,
+.wa__summary {
+	width: 80%;
+}
+
+.wa__title {
+	font-family: "basic-sans", sans-serif;
+	font-size: 34px;
+	font-weight: 700;
+	line-height: 115%;
+	margin: 0 0 20px;
+}
+
+.wa__subtitle {
+	font-family: "basic-sans", sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	letter-spacing: .5px;
+	line-height: 140%;
+	margin: 0 0 14px;
+	text-transform: uppercase;
+}
+
+.wa__summary {
+	opacity: .9;
+}
+
+.wa__title + .wa__subtitle {
+	margin-bottom: 20px;
+	margin-top: -10px;
 }
