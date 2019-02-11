@@ -47,6 +47,7 @@ export const WikiApiHandler = (() => {
 		return {
 			id: summary.pageid,
 			title: summary.title,
+			description: summary.description,
 			summary: summary.extract,
 			image: summary.thumbnail && summary.thumbnail.source
 		};
@@ -63,7 +64,8 @@ export const WikiApiHandler = (() => {
 	 * a random article if undefined
 	 */
 	const getArticleFromComponent = async (callback, title) => {
-		if (typeof title === 'undefined') {
+		// retrieve random article title if none provided
+		if (typeof title !== 'string') {
 			title = await getRandomArticle(title);
 		}
 

@@ -9,6 +9,7 @@ class WikiArticle extends Component {
 		this.state = {
 			id: null,
 			title: '',
+			description: '',
 			summary: '',
 			image: defaultImg
 		};
@@ -38,19 +39,50 @@ class WikiArticle extends Component {
 		});
 	}
 
+	/**
+	 * For a given character limit, trims text to the nearest word
+	 * and appends an ellipsis.
+	 * 
+	 * @param {string} str - The string to trim
+	 * @param {number} limit - Character limit for text
+	 * @param {boolean} appendEllipsis - Whether to append an ellipsis
+	 * @param {string} delimiter - The character to trim the string at
+	 * @returns {string} The trimmed string
+	 */
+	trimStr(str, limit = 500, appendEllipsis = false, delimiter = ' ') {
+		if (appendEllipsis) {
+			limit = limit - 3;
+		}
+
+		if (str.length > limit) {
+			str = str.substring(0, str.lastIndexOf(delimiter, limit));
+
+			if (appendEllipsis) {
+				str += '...';
+			}
+		}
+
+		return str;
+	}
+
 	render() {
 		return (
-			<div className="WikiArticle">
-				<div className="content">
-					<h2 className="title">{this.state.title}</h2>
-					<div className="summary">{this.state.summary}</div>
-				</div>
+			<div className="wa">
 				<div
-					className="graphic"
+					className="wa-img"
 					style={{
 						backgroundImage: `url('${this.state.image}')`
 					}}
 				>
+				</div>
+				<div className="wa-body">
+					<div className="wa-content">
+						<h2 className="title">{this.state.title}</h2>
+						<h3 className="description">{this.state.description}</h3>
+						<div className="summary">
+							{this.trimStr(this.state.summary, 210, true)}
+						</div>
+					</div>
 				</div>
 			</div>
 		);
