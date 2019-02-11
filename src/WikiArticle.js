@@ -81,7 +81,7 @@ class WikiArticle extends Component {
 							{this.trimStr(this.state.title, 50, true)}
 						</h2>
 						<h3 className="wa__subtitle">
-							{this.trimStr(this.state.description, 100, true)}
+							{this.trimStr(this.state.description, 50, true)}
 						</h3>
 						<div className="wa__summary">
 							{this.trimStr(this.state.summary, 250, true)}
