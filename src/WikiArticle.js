@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './WikiArticle.css';
 import { WikiApiHandler } from './WikiApiHandler';
+import './build/WikiArticle.css';
 import defaultImg from './default-article-image.jpg';
 
 class WikiArticle extends Component {
