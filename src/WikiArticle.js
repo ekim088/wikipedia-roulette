@@ -3,7 +3,38 @@ import { WikiApiHandler } from './WikiApiHandler';
 import './dist/WikiArticle.css';
 import defaultImg from './default-article-image.jpg';
 
-class WikiArticle extends Component {
+/**
+ * For a given character limit, trims text to the nearest word
+ * and appends an ellipsis.
+ * @param {string} str The string to trim.
+ * @param {number} limit Character limit for text.
+ * @param {boolean} appendEllipsis Whether to append an ellipsis if the original
+ * 	string exceeds the requested limit.
+ * @param {string} delimiter The character to trim the string at.
+ * @returns {string} The trimmed string.
+ */
+export const trimStr = (
+	str,
+	limit = 500,
+	appendEllipsis = true,
+	delimiter = ' '
+) => {
+	const ellipsis = '...';
+	const updatedLimit = appendEllipsis ? limit - ellipsis.length : limit;
+	let updatedStr = str;
+
+	if (str.length > updatedLimit) {
+		updatedStr = str.substring(0, str.lastIndexOf(delimiter, updatedLimit));
+
+		if (appendEllipsis) {
+			updatedStr += ellipsis;
+		}
+	}
+
+	return updatedStr;
+};
+
+export default class WikiArticle extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -15,7 +46,7 @@ class WikiArticle extends Component {
 		};
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		/**
 		 * Initiate call to Wikipedia API. Supplying callback method to
 		 * update Component state once API requests complete.
@@ -39,32 +70,6 @@ class WikiArticle extends Component {
 		});
 	}
 
-	/**
-	 * For a given character limit, trims text to the nearest word
-	 * and appends an ellipsis.
-	 * 
-	 * @param {string} str - The string to trim
-	 * @param {number} limit - Character limit for text
-	 * @param {boolean} appendEllipsis - Whether to append an ellipsis
-	 * @param {string} delimiter - The character to trim the string at
-	 * @returns {string} The trimmed string
-	 */
-	trimStr(str, limit = 500, appendEllipsis = false, delimiter = ' ') {
-		if (appendEllipsis) {
-			limit = limit - 3;
-		}
-
-		if (str.length > limit) {
-			str = str.substring(0, str.lastIndexOf(delimiter, limit));
-
-			if (appendEllipsis) {
-				str += '...';
-			}
-		}
-
-		return str;
-	}
-
 	render() {
 		return (
 			<div className="wa">
@@ -78,13 +83,13 @@ class WikiArticle extends Component {
 				<div className="wa__body">
 					<div className="wa__content">
 						<h2 className="wa__title">
-							{this.trimStr(this.state.title, 50, true)}
+							{trimStr(this.state.title, 50)}
 						</h2>
 						<h3 className="wa__subtitle">
-							{this.trimStr(this.state.description, 50, true)}
+							{trimStr(this.state.description, 50)}
 						</h3>
 						<div className="wa__summary">
-							{this.trimStr(this.state.summary, 250, true)}
+							{trimStr(this.state.summary, 250)}
 						</div>
 					</div>
 				</div>
@@ -92,5 +97,3 @@ class WikiArticle extends Component {
 		);
 	}
 }
-
-export default WikiArticle;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import WikiArticle from './WikiArticle';
 import './dist/WikiRoulette.css';
 
-class WikiRoulette extends Component {
+export default class WikiRoulette extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -11,7 +11,12 @@ class WikiRoulette extends Component {
 	}
 
 	appendArticle() {
-		this.setState({ articles: [ ...this.state.articles, <WikiArticle key={this.state.articles.length}/>] });
+		this.setState({
+			articles: [
+				...this.state.articles,
+				<WikiArticle key={this.state.articles.length}/>
+			]
+		});
 	}
 
 	render() {
@@ -19,11 +24,9 @@ class WikiRoulette extends Component {
 			<div className="WikiRoulette" onClick={() => this.appendArticle()}>
 				<div className="backdrop"></div>
 				<div className="articles">
-					{this.state.articles.map(article => article)}
+					{this.state.articles.slice(0)}
 				</div>
 			</div>
 		);
 	}
 }
-
-export default WikiRoulette;
