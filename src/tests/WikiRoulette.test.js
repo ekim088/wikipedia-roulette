@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import WikiRoulette from './WikiRoulette';
+import WikiRoulette from '../components/WikiRoulette';
 
 it('renders without crashing', () => {
 	const div = document.createElement('div');

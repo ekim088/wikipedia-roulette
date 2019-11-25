@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import WikiArticle from './WikiArticle';
-import './scss/WikiRoulette.scss';
+import '../scss/WikiRoulette.scss';
 
 export default class WikiRoulette extends Component {
 	constructor(props) {
