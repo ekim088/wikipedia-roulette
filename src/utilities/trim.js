@@ -1,24 +1,23 @@
+// @flow
 /**
- * For a given character limit, trims text to the nearest word
- * and appends an ellipsis.
+ * Trims text to the nearest sentence that does not exceed the given
+ * character limit.
  * @param {string} str The string to trim.
  * @param {number} limit Character limit for text.
- * @param {boolean} appendEllipsis Whether to append an ellipsis if the original
- * 	string exceeds the requested limit.
- * @param {string} delimiter The character to trim the string at.
  * @returns {string} The trimmed string.
  */
-const trim = (str, limit = 500, appendEllipsis = true, delimiter = ' ') => {
-	const ellipsis = '...';
-	const updatedLimit = appendEllipsis ? limit - ellipsis.length : limit;
-	let updatedStr = str;
+const trim = (str: string, limit: number = 500) => {
+	let updatedStr: string = str;
 
-	if (str.length > updatedLimit) {
-		updatedStr = str.substring(0, str.lastIndexOf(delimiter, updatedLimit));
+	if (str.length > limit) {
+		updatedStr = updatedStr.substring(0, limit);
 
-		if (appendEllipsis) {
-			updatedStr += ellipsis;
-		}
+		// trim to nearest end of sentence
+		const trimmedStr: string =
+			updatedStr.replace(/(?=[^.?!]*$)./m, '|||').split('|||')[0] || '';
+
+		// append ellipsis if substring does not contain a sentence
+		updatedStr = trimmedStr || `${updatedStr.slice(0, -3).trim()}...`;
 	}
 
 	return updatedStr;
