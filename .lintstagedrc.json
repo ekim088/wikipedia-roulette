@@ -1,0 +1,7 @@
+{
+	"*.+(js|jsx)": ["eslint --fix", "git add"],
+	"*.+(json|css|scss|md)": [
+		"prettier --use-tabs --single-quote --write",
+		"git add"
+	]
+}

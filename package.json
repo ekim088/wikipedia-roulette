@@ -16,6 +16,10 @@
 		"eslint-plugin-jsx-a11y": "^6.2.3",
 		"eslint-plugin-prettier": "^3.1.1",
 		"eslint-plugin-react": "^7.16.0",
+		"flow-bin": "^0.112.0",
+		"flow-typed": "^2.6.2",
+		"husky": "^3.1.0",
+		"lint-staged": "^9.5.0",
 		"prettier": "^1.19.1"
 	},
 	"scripts": {
@@ -23,7 +27,7 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"lint": "eslint --fix ."
+		"lint": "eslint --fix . && flow"
 	},
 	"eslintConfig": {
 		"extends": "react-app"

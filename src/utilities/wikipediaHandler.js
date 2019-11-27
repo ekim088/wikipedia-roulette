@@ -1,18 +1,19 @@
+// @flow
 import { wikiLogger } from './logger';
 
-const wikiEndpoint = 'https://en.wikipedia.org/api/rest_v1';
+const wikiEndpoint: string = 'https://en.wikipedia.org/api/rest_v1';
 
 /**
  * Retrieves a random article from Wikipedia.
  * @returns {string} A Wikipedia article title.
  */
-const fetchRandomArticleTitle = async () => {
-	let articleTitle;
+const fetchRandomArticleTitle = async (): Promise<string> => {
+	let articleTitle: string = '';
 	wikiLogger.info('requesting random article');
 
 	try {
-		const response = await fetch(`${wikiEndpoint}/page/random/title`);
-		const json = await response.json();
+		const response: Object = await fetch(`${wikiEndpoint}/page/random/title`);
+		const json: { items: Array<Object> } = await response.json();
 		const { title } = json.items[0];
 		wikiLogger.info(`retrieved article title "${title}"`);
 		articleTitle = title;
@@ -27,15 +28,15 @@ const fetchRandomArticleTitle = async () => {
  * Retrieves the Wikipedia article summary of a given title.
  * @param {string} title The title of the Wikipedia article to request.
  */
-const fetchArticleSummaryByTitle = async title => {
+const fetchArticleSummaryByTitle = async (title: string): Promise<Object> => {
 	let responseJson;
 	wikiLogger.info(`requesting article summary by title "${title}"`);
 
 	try {
-		const response = await fetch(
+		const response: Object = await fetch(
 			`${wikiEndpoint}/page/summary/${title.replace(' ', '_')}`
 		);
-		const json = await response.json();
+		const json: Object = await response.json();
 		wikiLogger.info(`retrieved article summary for "${title}"`);
 		responseJson = json;
 	} catch (e) {
@@ -49,7 +50,7 @@ const fetchArticleSummaryByTitle = async title => {
  * Retrieves a Wikipedia article.
  * @param {string} [title] The title of the Wikipedia article to request.
  */
-const getArticleSummary = async title =>
+const getArticleSummary = async (title: ?string): Promise<Object> =>
 	fetchArticleSummaryByTitle(
 		typeof title === 'string' ? title : await fetchRandomArticleTitle()
 	);
