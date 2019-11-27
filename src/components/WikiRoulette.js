@@ -6,26 +6,23 @@ export default class WikiRoulette extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			articles: [<WikiArticle key="0"/>]
+			articles: [<WikiArticle key="0" />]
 		};
 	}
 
 	appendArticle() {
-		this.setState({
-			articles: [
-				...this.state.articles,
-				<WikiArticle key={this.state.articles.length}/>
-			]
-		});
+		this.setState(({ articles }) => ({
+			articles: [...articles, <WikiArticle key={articles.length} />]
+		}));
 	}
 
 	render() {
+		const { articles } = this.state;
+
 		return (
 			<div className="WikiRoulette" onClick={() => this.appendArticle()}>
-				<div className="backdrop"></div>
-				<div className="articles">
-					{this.state.articles.slice(0)}
-				</div>
+				<div className="backdrop" />
+				<div className="articles">{articles.slice(0)}</div>
 			</div>
 		);
 	}

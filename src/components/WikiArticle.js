@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import trim from '../utilities/trim';
-import { getArticleSummary } from '../utilities/wikipediaHandler';
+import getArticleSummary from '../utilities/wikipediaHandler';
 import '../scss/WikiArticle.scss';
 import defaultImg from '../default-article-image.jpg';
 
@@ -14,9 +14,7 @@ const parseArticleSummary = ({
 	title,
 	description,
 	extract,
-	thumbnail: {
-		source
-	} = {}
+	thumbnail: { source } = {}
 }) => ({
 	id: pageid,
 	title,
@@ -24,6 +22,8 @@ const parseArticleSummary = ({
 	summary: extract,
 	image: source || defaultImg
 });
+
+const renderLoadingState = () => <div>Loading...</div>;
 
 export default class WikiArticle extends Component {
 	constructor(props) {
@@ -33,56 +33,40 @@ export default class WikiArticle extends Component {
 
 	componentDidMount() {
 		// fetch Wikipedia article and update state
-		getArticleSummary()
-			.then(articleSummary => {
-				this.setState({
-					...parseArticleSummary(articleSummary),
-					loaded: true
-				})
+		getArticleSummary().then(articleSummary => {
+			this.setState({
+				...parseArticleSummary(articleSummary),
+				loaded: true
 			});
+		});
 	}
 
 	renderArticle() {
+		const { description, image, summary, title } = this.state;
+
 		return (
-			<React.Fragment>
+			<>
 				<div
 					className="wa__img"
-					style={{
-						backgroundImage: `url('${this.state.image}')`
-					}}
-				>
-				</div>
+					style={{ backgroundImage: `url('${image}')` }}
+				/>
 				<div className="wa__body">
 					<div className="wa__content">
-						<h2 className="wa__title">
-							{trim(this.state.title, 50)}
-						</h2>
-						<h3 className="wa__subtitle">
-							{trim(this.state.description, 50)}
-						</h3>
-						<div className="wa__summary">
-							{trim(this.state.summary, 250)}
-						</div>
+						<h2 className="wa__title">{trim(title, 50)}</h2>
+						<h3 className="wa__subtitle">{trim(description, 50)}</h3>
+						<div className="wa__summary">{trim(summary, 250)}</div>
 					</div>
 				</div>
-			</React.Fragment>
-		);
-	}
-
-	renderLoadingState() {
-		return (
-			<div>Loading...</div>
+			</>
 		);
 	}
 
 	render() {
+		const { loaded } = this.state;
+
 		return (
 			<div className="wa">
-				{this.state.loaded ? (
-					this.renderArticle()
-				) : (
-					this.renderLoadingState()
-				)}
+				{loaded ? this.renderArticle() : renderLoadingState()}
 			</div>
 		);
 	}

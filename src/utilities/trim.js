@@ -8,12 +8,7 @@
  * @param {string} delimiter The character to trim the string at.
  * @returns {string} The trimmed string.
  */
-const trim = (
-	str,
-	limit = 500,
-	appendEllipsis = true,
-	delimiter = ' '
-) => {
+const trim = (str, limit = 500, appendEllipsis = true, delimiter = ' ') => {
 	const ellipsis = '...';
 	const updatedLimit = appendEllipsis ? limit - ellipsis.length : limit;
 	let updatedStr = str;
