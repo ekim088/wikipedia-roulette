@@ -25,7 +25,8 @@
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
-		"test": "react-scripts test",
+		"testWatch": "react-scripts test",
+		"test": "react-scripts test --watchAll=false",
 		"eject": "react-scripts eject",
 		"lint": "eslint --fix . && flow"
 	},
@@ -42,6 +43,22 @@
 			"last 1 chrome version",
 			"last 1 firefox version",
 			"last 1 safari version"
+		]
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"*.+(js|jsx)": [
+			"eslint --fix",
+			"npm test",
+			"git add"
+		],
+		"*.+(json|css|scss|md)": [
+			"prettier --use-tabs --single-quote --write",
+			"git add"
 		]
 	}
 }
