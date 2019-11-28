@@ -16,4 +16,12 @@ describe('trim', () => {
 			'Praesent commodo cursus magna, vel scelerisque nisl consectetur et.'
 		);
 	});
+
+	it('avoids ending a sentence at a abbreviation', () => {
+		let testSentence = 'South Korea is a country. The U.S.A. is a country';
+		expect(trim(testSentence, 45)).toBe('South Korea is a country.');
+
+		testSentence = 'This is a message from Mr. and Mrs. Kim.';
+		expect(trim(testSentence, 33)).toBe('This is a message from Mr. and...');
+	});
 });
