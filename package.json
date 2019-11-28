@@ -25,10 +25,12 @@
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
-		"testWatch": "react-scripts test",
 		"test": "react-scripts test --watchAll=false",
+		"testPreCommit": "react-scripts test --watchAll=false --findRelatedTests",
+		"testWatch": "react-scripts test",
 		"eject": "react-scripts eject",
-		"lint": "eslint --fix . && flow"
+		"lint": "eslint --fix . && flow",
+		"precommit": "lint-staged"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
@@ -53,7 +55,7 @@
 	"lint-staged": {
 		"*.+(js|jsx)": [
 			"eslint --fix",
-			"npm test",
+			"npm run testPreCommit",
 			"git add"
 		],
 		"*.+(json|css|scss|md)": [
