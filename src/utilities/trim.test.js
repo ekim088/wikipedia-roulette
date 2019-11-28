@@ -1,27 +1,36 @@
 import trim from './trim';
 
 describe('trim', () => {
-	it('trims a string to the desired length', () => {
-		expect(trim('This is longer than the length', 10).length).toBe(10);
+	it('trims and appends ellipsis to single sentence strings greater than the limit', () => {
+		const testStr = 'This is longer than the length';
+		const limit = testStr.length - 1;
+		const expected = 'This is longer than the le...';
+		expect(trim(testStr, limit)).toBe(expected);
 	});
 
-	it('returns the original string if shorter than the desired length', () => {
-		expect(trim('Short string!', 50)).toBe('Short string!');
+	it('returns the original string if shorter than or equal the desired length', () => {
+		const testStr = 'Short string!';
+		expect(trim(testStr, testStr.length)).toBe(testStr);
+		expect(trim(testStr, testStr.length + 1)).toBe(testStr);
 	});
 
 	it('returns trims to the end of the nearest sentence if string contains multiple sentences', () => {
-		const sentences =
-			'Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.';
-		expect(trim(sentences, 100)).toBe(
+		const testStr =
+			'Praesent commodo cursus magna, vel scelerisque nisl consectetur ' +
+			'et. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.';
+		const limit = testStr.length - 1;
+		expect(trim(testStr, limit)).toBe(
 			'Praesent commodo cursus magna, vel scelerisque nisl consectetur et.'
 		);
 	});
 
 	it('avoids ending a sentence at a abbreviation', () => {
-		let testSentence = 'South Korea is a country. The U.S.A. is a country';
-		expect(trim(testSentence, 45)).toBe('South Korea is a country.');
+		let testStr = 'South Korea is a country. The U.S.A. is a country';
+		let limit = testStr.length - 1;
+		expect(trim(testStr, limit)).toBe('South Korea is a country.');
 
-		testSentence = 'This is a message from Mr. and Mrs. Kim.';
-		expect(trim(testSentence, 33)).toBe('This is a message from Mr. and...');
+		testStr = 'This is a message from Mr. and Mrs. Kim.';
+		limit = testStr.length - 1;
+		expect(trim(testStr, limit)).toBe('This is a message from Mr. and Mrs....');
 	});
 });
