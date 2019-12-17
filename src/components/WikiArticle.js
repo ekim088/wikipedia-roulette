@@ -7,19 +7,28 @@ import defaultImg from '../default-article-image.jpg';
 
 // flow types
 type Article = {
-	id: ?string,
-	title: ?string,
 	description: ?string,
+	externalUrl: ?string,
+	id: ?string,
+	image: ?string,
 	summary: ?string,
-	image: ?string
+	title: ?string
 };
 
 type ArticleResponse = {
-	pageid: ?string,
-	title: ?string,
+	content_urls: {
+		desktop: {
+			page: ?string
+		},
+		mobile: {
+			page: ?string
+		}
+	},
 	description: ?string,
 	extract: ?string,
-	thumbnail: { source: ?string }
+	pageid: ?string,
+	thumbnail: { source: ?string },
+	title: ?string
 };
 
 type Props = {};
@@ -35,17 +44,19 @@ type State = {
  * @returns {Object} Parsed article data.
  */
 const parseArticleSummary = ({
-	pageid,
-	title,
+	content_urls: contentUrls,
 	description,
 	extract,
-	thumbnail: { source } = {}
+	pageid,
+	thumbnail: { source } = {},
+	title
 }: ArticleResponse): Article => ({
-	id: pageid,
-	title,
 	description,
+	externalUrl: contentUrls.desktop.page,
+	id: pageid,
+	image: source || defaultImg,
 	summary: extract,
-	image: source || defaultImg
+	title
 });
 
 const renderLoadingState = () => <div>Loading...</div>;
@@ -54,12 +65,13 @@ export default class WikiArticle extends Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			id: null,
-			title: null,
 			description: null,
-			summary: null,
+			externalUrl: null,
+			id: null,
 			image: null,
-			loaded: false
+			loaded: false,
+			summary: null,
+			title: null
 		};
 	}
 
@@ -74,7 +86,7 @@ export default class WikiArticle extends Component<Props, State> {
 	}
 
 	renderArticle() {
-		const { description, id, image, summary, title } = this.state;
+		const { description, externalUrl, id, image, summary, title } = this.state;
 		const titleId: ?string = id && `${id}-title`;
 		const summaryId: ?string = id && `${id}-summary`;
 
@@ -101,6 +113,7 @@ export default class WikiArticle extends Component<Props, State> {
 					<p className="wa__summary" id={summaryId}>
 						{summary && trim(summary, 250)}
 					</p>
+					<a href={externalUrl}>Test Link</a>
 				</div>
 			</>
 		);

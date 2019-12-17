@@ -11,9 +11,13 @@ export default class WikiRoulette extends Component {
 	}
 
 	appendArticle() {
+		// add new article component
 		this.setState(({ articles }) => ({
 			articles: [...articles, <WikiArticle key={articles.length} />]
 		}));
+
+		// update history component
+		// ...
 	}
 
 	render() {
