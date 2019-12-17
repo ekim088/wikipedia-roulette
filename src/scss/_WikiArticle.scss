@@ -1,0 +1,74 @@
+.articles .wa {
+	display: inline-block;
+	margin: 0 40px 0 0;
+	vertical-align: top;
+}
+
+.articles .wa:last-child {
+	margin-right: 0;
+}
+
+.wa {
+	margin: 0 auto;
+	position: relative;
+	width: 300px;
+	border-top: 2px solid #ccc;
+	padding: 30px 0;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wa__content {
+	font-family: 'basic-sans', sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 140%;
+}
+
+.wa__img-container {
+	height: 300px;
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+	margin: 0 auto 20px;
+}
+
+.wa__img {
+	background: center 5% / cover no-repeat #e6e7e8;
+	filter: grayscale(100%);
+	position: absolute;
+	height: 100%;
+	top: 0;
+	left: 0;
+	transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	width: 100%;
+
+	.wa:hover & {
+		filter: none;
+		transform: scale(1.01);
+	}
+}
+
+.wa__title {
+	font-family: 'basic-sans', sans-serif;
+	font-size: 34px;
+	font-weight: 700;
+	line-height: 115%;
+
+	font-family: 'le-monde-journal-std-2', serif;
+	font-weight: 400;
+	font-style: normal;
+	margin: 0 auto 20px;
+}
+
+.wa__subtitle {
+	font-family: 'basic-sans', sans-serif;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 140%;
+	margin: 0 auto 20px;
+	text-transform: uppercase;
+}
+
+.wa__summary {
+	opacity: 0.8;
+}
