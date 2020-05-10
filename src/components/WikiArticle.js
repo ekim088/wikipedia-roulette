@@ -1,9 +1,12 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import trim from '../utilities/trim';
 import getArticleSummary from '../utilities/wikipediaHandler';
 import '../scss/_WikiArticle.scss';
 import defaultImg from '../default-article-image.jpg';
+
+import addArticle from '../actions/addArticle';
 
 // flow types
 type Article = {
@@ -31,7 +34,14 @@ type ArticleResponse = {
 	title: ?string
 };
 
-type Props = {};
+export type SharedArticle = {
+	title: ?string,
+	description: ?string
+};
+
+type Props = {
+	dispatchArticle: SharedArticle => void
+};
 
 type State = {
 	...Article,
@@ -52,7 +62,7 @@ const parseArticleSummary = ({
 	title
 }: ArticleResponse): Article => ({
 	description,
-	externalUrl: contentUrls.desktop.page,
+	externalUrl: contentUrls ? contentUrls.desktop.page : '',
 	id: pageid,
 	image: source || defaultImg,
 	summary: extract,
@@ -61,7 +71,7 @@ const parseArticleSummary = ({
 
 const renderLoadingState = () => <div>Loading...</div>;
 
-export default class WikiArticle extends Component<Props, State> {
+class WikiArticle extends Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
@@ -75,14 +85,22 @@ export default class WikiArticle extends Component<Props, State> {
 		};
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
+		const { dispatchArticle } = this.props;
+
 		// fetch Wikipedia article and update state
-		getArticleSummary().then((articleSummary: ArticleResponse): void => {
-			this.setState({
-				...parseArticleSummary(articleSummary),
-				loaded: true
-			});
+		const articleSummary: ArticleResponse = await getArticleSummary();
+		const article: Article = { ...parseArticleSummary(articleSummary) };
+		const { title, description } = article;
+
+		// apply article data to state
+		this.setState({
+			...article,
+			loaded: true
 		});
+
+		// apply article data to shared state
+		dispatchArticle({ title, description });
 	}
 
 	renderArticle() {
@@ -129,3 +147,10 @@ export default class WikiArticle extends Component<Props, State> {
 		);
 	}
 }
+
+const mapStateToProps = () => ({});
+const mapDispatchToProps = dispatch => ({
+	dispatchArticle: data => dispatch(addArticle(data))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(WikiArticle);

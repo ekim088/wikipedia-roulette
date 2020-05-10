@@ -1,33 +1,53 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import WikiArticle from './WikiArticle';
 import '../scss/_WikiRoulette.scss';
 
-export default class WikiRoulette extends Component {
+class WikiRoulette extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			articles: [<WikiArticle key="0" />]
+			articleComponents: []
 		};
+	}
+
+	componentDidMount() {
+		// load initial article
+		this.setState(() => ({
+			articleComponents: [<WikiArticle key="0" />]
+		}));
 	}
 
 	appendArticle() {
 		// add new article component
-		this.setState(({ articles }) => ({
-			articles: [...articles, <WikiArticle key={articles.length} />]
+		this.setState(({ articleComponents }) => ({
+			articleComponents: [
+				...articleComponents,
+				<WikiArticle key={articleComponents.length} />
+			]
 		}));
 
-		// update history component
+		// update history component via shared state
 		// ...
 	}
 
 	render() {
-		const { articles } = this.state;
+		const { articleComponents } = this.state;
 
 		return (
-			<div className="WikiRoulette" onClick={() => this.appendArticle()}>
+			<div className="WikiRoulette">
 				<div className="backdrop" />
-				<div className="articles">{articles.slice(0)}</div>
+				<pre>{JSON.stringify(this.props)}</pre>
+				<button type="button" onClick={() => this.appendArticle()}>
+					Add article
+				</button>
+				<div className="articles">{articleComponents.slice(0)}</div>
 			</div>
 		);
 	}
 }
+
+const mapStateToProps = state => ({ ...state });
+const mapDispatchToProps = () => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(WikiRoulette);
