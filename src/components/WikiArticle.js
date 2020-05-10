@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import trim from '../utilities/trim';
 import getArticleSummary from '../utilities/wikipediaHandler';
+import type { ArticleResponse } from '../utilities/wikipediaHandler';
 import '../scss/_WikiArticle.scss';
 import defaultImg from '../default-article-image.jpg';
 
@@ -15,22 +16,6 @@ type Article = {
 	id: ?string,
 	image: ?string,
 	summary: ?string,
-	title: ?string
-};
-
-type ArticleResponse = {
-	content_urls: {
-		desktop: {
-			page: ?string
-		},
-		mobile: {
-			page: ?string
-		}
-	},
-	description: ?string,
-	extract: ?string,
-	pageid: ?string,
-	thumbnail: { source: ?string },
 	title: ?string
 };
 
@@ -89,7 +74,7 @@ class WikiArticle extends Component<Props, State> {
 		const { dispatchArticle } = this.props;
 
 		// fetch Wikipedia article and update state
-		const articleSummary: ArticleResponse = await getArticleSummary();
+		const articleSummary = await getArticleSummary();
 		const article: Article = { ...parseArticleSummary(articleSummary) };
 		const { title, description } = article;
 

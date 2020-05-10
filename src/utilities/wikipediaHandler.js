@@ -1,6 +1,22 @@
 // @flow
 import { wikiLogger } from './logger';
 
+export type ArticleResponse = {
+	content_urls: {
+		desktop: {
+			page: ?string
+		},
+		mobile: {
+			page: ?string
+		}
+	},
+	description: ?string,
+	extract: ?string,
+	pageid: ?string,
+	thumbnail: { source: ?string },
+	title: ?string
+};
+
 const wikiEndpoint: string = 'https://en.wikipedia.org/api/rest_v1';
 
 /**
@@ -12,8 +28,10 @@ const fetchRandomArticleTitle = async (): Promise<string> => {
 	wikiLogger.info('requesting random article');
 
 	try {
-		const response: Object = await fetch(`${wikiEndpoint}/page/random/title`);
-		const json: { items: Array<Object> } = await response.json();
+		const response = await fetch(`${wikiEndpoint}/page/random/title`);
+		const json: {
+			items: Array<{ title: string, ... }>
+		} = await response.json();
 		const { title } = json.items[0];
 		wikiLogger.info(`retrieved article title "${title}"`);
 		articleTitle = title;
@@ -33,10 +51,10 @@ const fetchArticleSummaryByTitle = async (title: string): Promise<Object> => {
 	wikiLogger.info(`requesting article summary by title "${title}"`);
 
 	try {
-		const response: Object = await fetch(
+		const response = await fetch(
 			`${wikiEndpoint}/page/summary/${title.replace(' ', '_')}`
 		);
-		const json: Object = await response.json();
+		const json: { ... } = await response.json();
 		wikiLogger.info(`retrieved article summary for "${title}"`);
 		responseJson = json;
 	} catch (e) {
@@ -50,7 +68,7 @@ const fetchArticleSummaryByTitle = async (title: string): Promise<Object> => {
  * Retrieves a Wikipedia article.
  * @param {string} [title] The title of the Wikipedia article to request.
  */
-const getArticleSummary = async (title: ?string): Promise<Object> =>
+const getArticleSummary = async (title: ?string): Promise<ArticleResponse> =>
 	fetchArticleSummaryByTitle(
 		typeof title === 'string' ? title : await fetchRandomArticleTitle()
 	);

@@ -1,9 +1,20 @@
+// @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import WikiArticle from './WikiArticle';
+import type { SharedArticle } from './WikiArticle';
 import '../scss/_WikiRoulette.scss';
 
-class WikiRoulette extends Component {
+// flow types
+type Props = {
+	articles: Array<SharedArticle> // eslint-disable-line react/no-unused-prop-types
+};
+
+type State = {
+	articleComponents: Array<WikiArticle>
+};
+
+class WikiRoulette extends Component<Props, State> {
 	constructor(props) {
 		super(props);
 		this.state = {
