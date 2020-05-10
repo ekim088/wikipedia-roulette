@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import trim from '../utilities/trim';
 import getArticleSummary from '../utilities/wikipediaHandler';
@@ -25,12 +25,8 @@ export type SharedArticle = {
 };
 
 type Props = {
-	dispatchArticle: SharedArticle => void
-};
-
-type State = {
 	...Article,
-	loaded: boolean
+	dispatchArticle: SharedArticle => void
 };
 
 /**
@@ -54,88 +50,133 @@ const parseArticleSummary = ({
 	title
 });
 
+/**
+ * Renders the article.
+ * @param {Object} article Article summary.
+ * @returns {string} Article markup.
+ */
+const renderArticle = ({
+	description,
+	externalUrl,
+	id,
+	image,
+	summary,
+	title
+}: Article) => {
+	const titleId: ?string = id ? `${id}-title` : null;
+	const summaryId: ?string = id ? `${id}-summary` : null;
+
+	return (
+		<>
+			<div className="wa__img-container">
+				<div
+					className="wa__img"
+					style={{
+						backgroundImage: image ? `url('${image}')` : 'none'
+					}}
+					role="img"
+					aria-labelledby={titleId}
+					aria-describedby={summaryId}
+				/>
+			</div>
+			<div className="wa__content">
+				{description && (
+					<h3 className="wa__subtitle">{trim(description, 100)}</h3>
+				)}
+				<h2 className="wa__title" id={titleId}>
+					{title && trim(title, 50)}
+				</h2>
+				<p className="wa__summary" id={summaryId}>
+					{summary && trim(summary, 250)}
+				</p>
+				<a href={externalUrl}>Test Link</a>
+			</div>
+		</>
+	);
+};
+
+/**
+ * Renders the article loading state.
+ * @returns {string} Article loading state markup.
+ */
 const renderLoadingState = () => <div>Loading...</div>;
 
-class WikiArticle extends Component<Props, State> {
-	constructor(props: Props) {
-		super(props);
-		this.state = {
-			description: null,
-			externalUrl: null,
-			id: null,
-			image: null,
-			loaded: false,
-			summary: null,
-			title: null
-		};
-	}
+const WikiArticle = ({
+	description: descProp,
+	dispatchArticle,
+	externalUrl: urlProp,
+	id: idProp,
+	image: imgProp,
+	summary: summaryProp,
+	title: titleProp
+}: Props) => {
+	const [description, setDescription] = useState(descProp);
+	const [externalUrl, setExternalUrl] = useState(urlProp);
+	const [id, setId] = useState(idProp);
+	const [image, setImage] = useState(imgProp);
+	const [summary, setSummary] = useState(summaryProp);
+	const [title, setTitle] = useState(titleProp);
+	const [loaded, setLoaded] = useState(!!(id && title && description));
 
-	async componentDidMount() {
-		const { dispatchArticle } = this.props;
+	// fetch Wikipedia article if article data not available
+	useEffect(
+		() => {
+			async function fetchArticle() {
+				const response = await getArticleSummary();
+				const {
+					description: responseDesc,
+					externalUrl: responseUrl,
+					id: responseId,
+					image: responseImg,
+					summary: responseSummary,
+					title: responseTitle
+				}: Article = { ...parseArticleSummary(response) };
 
-		// fetch Wikipedia article and update state
-		const articleSummary = await getArticleSummary();
-		const article: Article = { ...parseArticleSummary(articleSummary) };
-		const { title, description } = article;
+				setDescription(responseDesc);
+				setExternalUrl(responseUrl);
+				setId(responseId);
+				setImage(responseImg);
+				setSummary(responseSummary);
+				setTitle(responseTitle);
+				setLoaded(true);
 
-		// apply article data to state
-		this.setState({
-			...article,
-			loaded: true
-		});
+				// apply article data to shared state
+				dispatchArticle({
+					title: responseTitle,
+					description: responseDesc
+				});
+			}
 
-		// apply article data to shared state
-		dispatchArticle({ title, description });
-	}
+			if (!loaded) {
+				fetchArticle();
+			}
+		},
+		/**
+		 * See {@link https://github.com/facebook/create-react-app/issues/6880 Github}
+		 * for discusson on non-empty dependency array.
+		 */
+		[dispatchArticle, loaded]
+	);
 
-	renderArticle() {
-		const { description, externalUrl, id, image, summary, title } = this.state;
-		const titleId: ?string = id && `${id}-title`;
-		const summaryId: ?string = id && `${id}-summary`;
-
-		return (
-			<>
-				<div className="wa__img-container">
-					<div
-						className="wa__img"
-						style={{
-							backgroundImage: image ? `url('${image}')` : 'none'
-						}}
-						role="img"
-						aria-labelledby={titleId}
-						aria-describedby={summaryId}
-					/>
-				</div>
-				<div className="wa__content">
-					{description && (
-						<h3 className="wa__subtitle">{trim(description, 100)}</h3>
-					)}
-					<h2 className="wa__title" id={titleId}>
-						{title && trim(title, 50)}
-					</h2>
-					<p className="wa__summary" id={summaryId}>
-						{summary && trim(summary, 250)}
-					</p>
-					<a href={externalUrl}>Test Link</a>
-				</div>
-			</>
-		);
-	}
-
-	render() {
-		const { id, loaded } = this.state;
-
-		return (
-			<article className="wa" data-id={id}>
-				{loaded ? this.renderArticle() : renderLoadingState()}
-			</article>
-		);
-	}
-}
+	return (
+		<article className="wa" data-id={id}>
+			{loaded
+				? renderArticle({
+						description,
+						externalUrl,
+						id,
+						image,
+						summary,
+						title
+				  })
+				: renderLoadingState()}
+		</article>
+	);
+};
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = dispatch => ({
-	dispatchArticle: data => dispatch(addArticle(data))
+	dispatchArticle: (data: SharedArticle): void => dispatch(addArticle(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WikiArticle);

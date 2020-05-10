@@ -15,7 +15,7 @@ type State = {
 };
 
 class WikiRoulette extends Component<Props, State> {
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 		this.state = {
 			articleComponents: []
@@ -58,6 +58,10 @@ class WikiRoulette extends Component<Props, State> {
 	}
 }
 
+/**
+ * See {@link https://github.com/facebook/flow/issues/7493 GitHub} for more
+ * informartion on typing connect.
+ */
 const mapStateToProps = state => ({ ...state });
 const mapDispatchToProps = () => ({});
 
