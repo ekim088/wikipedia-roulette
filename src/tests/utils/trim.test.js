@@ -1,4 +1,4 @@
-import trim from './trim';
+import trim from '../../utils/trim';
 
 describe('trim', () => {
 	it('trims and appends ellipsis to single sentence strings greater than the limit', () => {

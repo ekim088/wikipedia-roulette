@@ -1,9 +1,9 @@
 // @flow
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import trim from '../utilities/trim';
-import getArticleSummary from '../utilities/wikipediaHandler';
-import type { ArticleResponse } from '../utilities/wikipediaHandler';
+import trim from '../utils/trim';
+import getArticleSummary from '../utils/wikipediaHandler';
+import type { ArticleResponse } from '../utils/wikipediaHandler';
 import '../scss/_WikiArticle.scss';
 import defaultImg from '../default-article-image.jpg';
 
@@ -89,7 +89,9 @@ const renderArticle = ({
 				<p className="wa__summary" id={summaryId}>
 					{summary && trim(summary, 250)}
 				</p>
-				<a href={externalUrl}>Test Link</a>
+				<a href={externalUrl} target="_blank" rel="noopener noreferrer">
+					Test Link
+				</a>
 			</div>
 		</>
 	);
