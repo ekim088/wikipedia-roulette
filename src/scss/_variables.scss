@@ -1,0 +1,38 @@
+// fonts
+$font-body-family: basic-sans;
+$font-body-line-height: 1.4;
+$font-body-size: 16px;
+$font-body-style: normal;
+$font-body-weight: 400;
+
+$font-header-2-line-height: 1.2;
+$font-header-2-size: 20px;
+$font-header-2-weight: 700;
+
+$font-header-3-size: 14px;
+$font-header-3-weight: 600;
+
+// containers
+$border-radius: 10px !default;
+
+$article-image-margin: 10px;
+$article-image-size: 60px;
+$article-padding: 20px;
+$article-width: 460px;
+
+// color-pallette
+$color-base-primary: #111;
+$color-base-secondary: #f5f6f7;
+
+$color-highlight-1-primary: #194ba6;
+$color-highlight-1-secondary: #e9f5ff;
+
+$color-highlight-2-primary: #4e3bb6;
+$color-highlight-2-secondary: #f5f2ff;
+
+$color-highlight-3-primary: #f9541a;
+$color-highlight-3-secondary: #ffe9e2;
+
+// animations
+$transition-duration: 0.3s;
+$transition-timing: cubic-bezier(0.4, 0, 0.2, 1);

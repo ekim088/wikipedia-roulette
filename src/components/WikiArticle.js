@@ -50,59 +50,6 @@ const parseArticleSummary = ({
 	title
 });
 
-/**
- * Renders the article.
- * @param {Object} article Article summary.
- * @returns {string} Article markup.
- */
-const renderArticle = ({
-	description,
-	externalUrl,
-	id,
-	image,
-	summary,
-	title
-}: Article) => {
-	const titleId: ?string = id ? `${id}-title` : null;
-	const summaryId: ?string = id ? `${id}-summary` : null;
-
-	return (
-		<>
-			<div className="wa__img-container">
-				<div
-					className="wa__img"
-					style={{
-						backgroundImage: image ? `url('${image}')` : 'none'
-					}}
-					role="img"
-					aria-labelledby={titleId}
-					aria-describedby={summaryId}
-				/>
-			</div>
-			<div className="wa__content">
-				{description && (
-					<h3 className="wa__subtitle">{trim(description, 100)}</h3>
-				)}
-				<h2 className="wa__title" id={titleId}>
-					{title && trim(title, 50)}
-				</h2>
-				<p className="wa__summary" id={summaryId}>
-					{summary && trim(summary, 250)}
-				</p>
-				<a href={externalUrl} target="_blank" rel="noopener noreferrer">
-					Test Link
-				</a>
-			</div>
-		</>
-	);
-};
-
-/**
- * Renders the article loading state.
- * @returns {string} Article loading state markup.
- */
-const renderLoadingState = () => <div>Loading...</div>;
-
 const WikiArticle = ({
 	description: descProp,
 	dispatchArticle,
@@ -116,9 +63,12 @@ const WikiArticle = ({
 	const [externalUrl, setExternalUrl] = useState(urlProp);
 	const [id, setId] = useState(idProp);
 	const [image, setImage] = useState(imgProp);
+	const [styleId] = useState(Math.floor(Math.random() * Math.floor(1)));
 	const [summary, setSummary] = useState(summaryProp);
 	const [title, setTitle] = useState(titleProp);
-	const [loaded, setLoaded] = useState(!!(id && title && description));
+	const [isLoaded, setIsLoaded] = useState(!!(id && title && description));
+	const summaryId: ?string = id ? `summary-${id}` : null;
+	const titleId: ?string = id ? `title-${id}` : null;
 
 	// fetch Wikipedia article if article data not available
 	useEffect(
@@ -140,7 +90,7 @@ const WikiArticle = ({
 				setImage(responseImg);
 				setSummary(responseSummary);
 				setTitle(responseTitle);
-				setLoaded(true);
+				setIsLoaded(true);
 
 				// apply article data to shared state
 				dispatchArticle({
@@ -149,7 +99,7 @@ const WikiArticle = ({
 				});
 			}
 
-			if (!loaded) {
+			if (!isLoaded) {
 				fetchArticle();
 			}
 		},
@@ -157,21 +107,41 @@ const WikiArticle = ({
 		 * See {@link https://github.com/facebook/create-react-app/issues/6880 Github}
 		 * for discusson on non-empty dependency array.
 		 */
-		[dispatchArticle, loaded]
+		[dispatchArticle, isLoaded]
 	);
 
 	return (
-		<article className="wa" data-id={id}>
-			{loaded
-				? renderArticle({
-						description,
-						externalUrl,
-						id,
-						image,
-						summary,
-						title
-				  })
-				: renderLoadingState()}
+		<article
+			className={`wa${isLoaded ? '' : ' loading'}${` style-${styleId}`}`}
+			data-id={id}
+		>
+			<div className={`wa-header${image ? ' has-image' : ''}`}>
+				{image && (
+					<div
+						className="wa-img"
+						style={{ backgroundImage: `url('${image}')` }}
+						role="img"
+						aria-labelledby={titleId}
+						aria-describedby={summaryId}
+					/>
+				)}
+				<div className="wa-header-content">
+					{title && <h2 className="wa-title">{trim(title, 50)}</h2>}
+					{description && (
+						<h3 className="wa-description">{trim(description, 100)}</h3>
+					)}
+				</div>
+			</div>
+			<div className="wa-content">
+				{summary && (
+					<p className="wa-summary" id={summaryId}>
+						{trim(summary, 250)}
+					</p>
+				)}
+				<a href={externalUrl} target="_blank" rel="noopener noreferrer">
+					Test Link
+				</a>
+			</div>
 		</article>
 	);
 };

@@ -1,3 +1,5 @@
+@import 'variables';
+
 html,
 body,
 #root {
@@ -5,8 +7,14 @@ body,
 }
 
 body {
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
 	margin: 0;
 	padding: 0;
+	font-family: $font-body-family;
+	font-size: $font-body-size;
+	font-weight: $font-body-weight;
+	font-style: $font-body-style;
+	line-height: $font-body-line-height;
+
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }

@@ -1,36 +1,14 @@
-body {
-	background-color: #fefcfe;
-}
+@import 'variables';
 
-/* .WikiRoulette {
-	height: 100%;
-	width: 100%;
-}
+.articles {
+	width: $article-width;
+	margin: 0 auto;
 
-.WikiRoulette .backdrop {
-	background-color: #ececec;
-	height: 100%;
-	left: 0;
-	position: absolute;
-	top: 0;
-	width: 100%;
-	z-index: -1;
-}
+	.wa {
+		margin: 0 0 40px 0;
 
-.WikiRoulette .articles {
-	height: 80%;
-	overflow: hidden;
-	padding: 40px 0;
-	position: relative;
-	top: 50%;
-	transform: translateY(-50%);
-} */
-
-@keyframes App-logo-spin {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(360deg);
+		&:last-child {
+			margin-bottom: 0;
+		}
 	}
 }
