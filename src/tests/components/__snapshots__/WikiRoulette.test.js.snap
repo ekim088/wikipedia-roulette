@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WikiRoulette renders the app 1`] = `
+<Provider
+  store={
+    Object {
+      "dispatch": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+      Symbol(observable): [Function],
+    }
+  }
+>
+  <Connect(WikiRoulette)>
+    <WikiRoulette
+      articles={Array []}
+    >
+      <div
+        className="WikiRoulette"
+      >
+        <div
+          className="backdrop"
+        />
+        <pre>
+          {"articles":[]}
+        </pre>
+        <Cylinder
+          articles={
+            Array [
+              <UNDEFINED />,
+            ]
+          }
+        >
+          <button
+            onClick={[Function]}
+            type="button"
+          >
+            Add article
+          </button>
+          <div
+            className="articles"
+          >
+            <Connect(WikiArticle)
+              key="0"
+            >
+              <WikiArticle
+                dispatchArticle={[Function]}
+              >
+                <article
+                  className="wa loading style-0"
+                >
+                  <div
+                    className="wa-header"
+                  >
+                    <div
+                      className="wa-header-content"
+                    />
+                  </div>
+                  <div
+                    className="wa-content"
+                  >
+                    <a
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      Test Link
+                    </a>
+                  </div>
+                </article>
+              </WikiArticle>
+            </Connect(WikiArticle)>
+          </div>
+        </Cylinder>
+      </div>
+    </WikiRoulette>
+  </Connect(WikiRoulette)>
+</Provider>
+`;

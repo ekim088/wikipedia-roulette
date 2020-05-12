@@ -1,58 +1,25 @@
+/* eslint react/prefer-stateless-function: 0 */
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import WikiArticle from './WikiArticle';
+import Cylinder from './Cylinder';
 import type { SharedArticle } from './WikiArticle';
 import '../scss/_WikiRoulette.scss';
 
 // flow types
 type Props = {
-	articles: Array<SharedArticle> // eslint-disable-line react/no-unused-prop-types
+	articles: ?Array<SharedArticle> // eslint-disable-line react/no-unused-prop-types
 };
 
-type State = {
-	articleComponents: Array<WikiArticle>
-};
+type State = {};
 
 class WikiRoulette extends Component<Props, State> {
-	constructor(props: Props) {
-		super(props);
-		this.state = {
-			articleComponents: []
-		};
-	}
-
-	componentDidMount() {
-		// load initial article
-		this.setState(() => ({
-			articleComponents: [<WikiArticle key="0" />]
-		}));
-	}
-
-	appendArticle() {
-		// add new article component
-		this.setState(({ articleComponents }) => ({
-			articleComponents: [
-				...articleComponents,
-				<WikiArticle key={articleComponents.length} />
-			]
-		}));
-
-		// update history component via shared state
-		// ...
-	}
-
 	render() {
-		const { articleComponents } = this.state;
-
 		return (
 			<div className="WikiRoulette">
 				<div className="backdrop" />
 				<pre>{JSON.stringify(this.props)}</pre>
-				<button type="button" onClick={() => this.appendArticle()}>
-					Add article
-				</button>
-				<div className="articles">{articleComponents.slice(0)}</div>
+				<Cylinder />
 			</div>
 		);
 	}
