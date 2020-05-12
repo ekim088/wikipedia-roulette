@@ -1,0 +1,15 @@
+{
+	"rules": {
+		"import/prefer-default-export": "off",
+		"react/jsx-no-undef": [2, { "allowGlobals": true }]
+	},
+	"globals": {
+		"React": "readonly",
+		"ReactDOM": "readonly",
+		"act": "readonly",
+		"Provider": "readonly",
+		"configureStore": "readonly",
+		"shallow": "readonly",
+		"mount": "readonly"
+	}
+}

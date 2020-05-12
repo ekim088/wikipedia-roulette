@@ -1,6 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`WikiArticle renders an article 1`] = `
+exports[`WikiArticle renders an article and fetches article data from Wikipedia if not provided 1`] = `
+<Provider
+  store={
+    Object {
+      "dispatch": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+      Symbol(observable): [Function],
+    }
+  }
+>
+  <Connect(WikiArticle)>
+    <WikiArticle
+      dispatchArticle={[Function]}
+    >
+      <article
+        className="wa loading style-0"
+      >
+        <div
+          className="wa-header"
+        >
+          <div
+            className="wa-header-content"
+          />
+        </div>
+        <div
+          className="wa-content"
+        >
+          <a
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Test Link
+          </a>
+        </div>
+      </article>
+    </WikiArticle>
+  </Connect(WikiArticle)>
+</Provider>
+`;
+
+exports[`WikiArticle should not fetch article data if provided 1`] = `
 <Provider
   store={
     Object {
@@ -13,19 +55,21 @@ exports[`WikiArticle renders an article 1`] = `
   }
 >
   <Connect(WikiArticle)
-    description="Some Description"
-    id="0"
+    description="Some description"
+    id="someId"
+    summary="Some summary."
     title="Some Title"
   >
     <WikiArticle
-      description="Some Description"
+      description="Some description"
       dispatchArticle={[Function]}
-      id="0"
+      id="someId"
+      summary="Some summary."
       title="Some Title"
     >
       <article
         className="wa style-0"
-        data-id="0"
+        data-id="someId"
       >
         <div
           className="wa-header"
@@ -41,13 +85,19 @@ exports[`WikiArticle renders an article 1`] = `
             <h3
               className="wa-description"
             >
-              Some Description
+              Some description
             </h3>
           </div>
         </div>
         <div
           className="wa-content"
         >
+          <p
+            className="wa-summary"
+            id="summary-someId"
+          >
+            Some summary.
+          </p>
           <a
             rel="noopener noreferrer"
             target="_blank"

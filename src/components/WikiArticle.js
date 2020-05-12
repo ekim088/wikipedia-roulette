@@ -66,7 +66,9 @@ const WikiArticle = ({
 	const [styleId] = useState(Math.floor(Math.random() * Math.floor(1)));
 	const [summary, setSummary] = useState(summaryProp);
 	const [title, setTitle] = useState(titleProp);
-	const [isLoaded, setIsLoaded] = useState(!!(id && title && description));
+	const [isLoaded, setIsLoaded] = useState(
+		!!(id && title && description && summary)
+	);
 	const summaryId: ?string = id ? `summary-${id}` : null;
 	const titleId: ?string = id ? `title-${id}` : null;
 
