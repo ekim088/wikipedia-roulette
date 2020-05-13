@@ -1,9 +1,11 @@
 // @flow
 import * as React from 'react';
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 type Props = {
-	children: React.Node
+	children: React.Node,
+	containerSelector?: string
 };
 
 /**
@@ -13,25 +15,33 @@ type Props = {
  * 	<MyComponentToAppend />
  * </AppendToBody>
  */
-const AppendToBody = ({ children }: Props) => {
+const AppendToBody = ({ children, containerSelector }: Props) => {
 	const el = document.createElement('div');
 
 	// safeguard to make sure container <div> does not affect layout
 	el.style.display = 'contents';
 
-	React.useEffect(() => {
-		if (document.body) {
-			document.body.appendChild(el);
+	useEffect(() => {
+		const customContainer =
+			containerSelector && document.querySelector(containerSelector);
+		const container = customContainer || document.body;
+
+		if (container) {
+			container.appendChild(el);
 		}
 
 		return () => {
-			if (document.body) {
-				document.body.removeChild(el);
+			if (container) {
+				container.removeChild(el);
 			}
 		};
-	}, [el]);
+	}, [el, containerSelector]);
 
 	return ReactDOM.createPortal(children, el);
+};
+
+AppendToBody.defaultProps = {
+	containerSelector: ''
 };
 
 export default AppendToBody;
