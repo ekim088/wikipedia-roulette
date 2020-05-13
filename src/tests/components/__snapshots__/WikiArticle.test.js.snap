@@ -17,19 +17,49 @@ exports[`WikiArticle renders an article and fetches article data from Wikipedia 
       dispatchArticle={[Function]}
     >
       <article
-        className="wa loading style-0"
+        className="wa style-0"
+        data-id="someId"
       >
         <div
-          className="wa-header"
+          className="wa-header has-image"
         >
           <div
-            className="wa-header-content"
+            aria-describedby="summary-someId"
+            aria-labelledby="title-someId"
+            className="wa-img"
+            role="img"
+            style={
+              Object {
+                "backgroundImage": "url('someimage.png')",
+              }
+            }
           />
+          <div
+            className="wa-header-content"
+          >
+            <h2
+              className="wa-title"
+            >
+              Some Title
+            </h2>
+            <h3
+              className="wa-description"
+            >
+              some description
+            </h3>
+          </div>
         </div>
         <div
           className="wa-content"
         >
+          <p
+            className="wa-summary"
+            id="summary-someId"
+          >
+            some extract
+          </p>
           <a
+            href="someDesktopUrl.com"
             rel="noopener noreferrer"
             target="_blank"
           >

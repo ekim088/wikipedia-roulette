@@ -1,5 +1,5 @@
-import WikiArticle from '../../components/WikiArticle';
-import { wikipediaHandlerTestUtil } from '../mocks';
+import WikiArticle, { parseArticleSummary } from '../../components/WikiArticle';
+import { mockWikipediaData, wikipediaHandlerTestUtil } from '../mocks';
 
 describe('WikiArticle', () => {
 	let container;
@@ -40,15 +40,11 @@ describe('WikiArticle', () => {
 			</Provider>
 		);
 
-		// wait for component to finish async calls
+		// wait for component to finish async calls and update state
 		await act(async () => {});
+		wrapper.update();
 
 		expect(wikipediaHandlerMock).toHaveBeenCalled();
-
-		/**
-		 * NOTE: Cannot currently test useEffect() lifecycle method. Revisit
-		 * when able to capture better snapshot.
-		 */
 		expect(wrapper).toMatchSnapshot();
 	});
 
@@ -64,10 +60,22 @@ describe('WikiArticle', () => {
 			</Provider>
 		);
 
-		// wait for component to finish async calls
+		// wait for component to finish async calls and update state
 		await act(async () => {});
+		wrapper.update();
 
 		expect(wikipediaHandlerMock).not.toHaveBeenCalled();
 		expect(wrapper).toMatchSnapshot();
+	});
+
+	it('should translate the article response data on parseArticleSummary', () => {
+		expect(parseArticleSummary(mockWikipediaData)).toEqual({
+			description: 'some description',
+			externalUrl: 'someDesktopUrl.com',
+			id: 'someId',
+			image: 'someimage.png',
+			summary: 'some extract',
+			title: 'Some Title'
+		});
 	});
 });

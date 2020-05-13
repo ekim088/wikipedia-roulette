@@ -15,6 +15,7 @@
 	"rules": {
 		"react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
 		"react/jsx-props-no-spreading": "off",
+		"react/static-property-placement": ["warn", "property assignment"],
 		"prettier/prettier": [
 			"error",
 			{
@@ -22,6 +23,7 @@
 				"useTabs": true
 			}
 		],
+		"no-mixed-operators": "off",
 		// temporarily disabling while developing POC
 		"jsx-a11y/click-events-have-key-events": "off",
 		"jsx-a11y/no-static-element-interactions": "off"

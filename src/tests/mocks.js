@@ -2,7 +2,7 @@ import * as wikipediaHandlerModule from '../utils/wikipediaHandler';
 
 const wikipediaHandlerModuleDefault = wikipediaHandlerModule.default;
 
-const mockWikipediaData = {
+export const mockWikipediaData = {
 	content_urls: {
 		desktop: {
 			page: 'someDesktopUrl.com'

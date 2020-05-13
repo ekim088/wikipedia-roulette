@@ -28,7 +28,7 @@ exports[`WikiRoulette renders the app 1`] = `
         <Cylinder
           articles={
             Array [
-              <UNDEFINED />,
+              <MountedArticle />,
             ]
           }
         >
@@ -38,39 +38,44 @@ exports[`WikiRoulette renders the app 1`] = `
           >
             Add article
           </button>
-          <div
+          <section
             className="articles"
           >
-            <Connect(WikiArticle)
+            <MountedArticle
               key="0"
             >
-              <WikiArticle
-                dispatchArticle={[Function]}
+              <Connect(WikiArticle)
+                callback={[Function]}
               >
-                <article
-                  className="wa loading style-0"
+                <WikiArticle
+                  callback={[Function]}
+                  dispatchArticle={[Function]}
                 >
-                  <div
-                    className="wa-header"
+                  <article
+                    className="wa loading style-0"
                   >
                     <div
-                      className="wa-header-content"
-                    />
-                  </div>
-                  <div
-                    className="wa-content"
-                  >
-                    <a
-                      rel="noopener noreferrer"
-                      target="_blank"
+                      className="wa-header"
                     >
-                      Test Link
-                    </a>
-                  </div>
-                </article>
-              </WikiArticle>
-            </Connect(WikiArticle)>
-          </div>
+                      <div
+                        className="wa-header-content"
+                      />
+                    </div>
+                    <div
+                      className="wa-content"
+                    >
+                      <a
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        Test Link
+                      </a>
+                    </div>
+                  </article>
+                </WikiArticle>
+              </Connect(WikiArticle)>
+            </MountedArticle>
+          </section>
         </Cylinder>
       </div>
     </WikiRoulette>
