@@ -1,5 +1,6 @@
 // @flow
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import trim from '../utils/trim';
 import getArticleSummary from '../utils/wikipediaHandler';
@@ -27,7 +28,8 @@ export type SharedArticle = {
 export type Props = {
 	...Article,
 	callback?: SharedArticle => any,
-	dispatchArticle?: SharedArticle => void
+	dispatchArticle?: SharedArticle => void,
+	forwardedRef?: React.ElementRef<any>
 };
 
 type State = {
@@ -62,6 +64,7 @@ class WikiArticle extends Component<Props, State> {
 		callback: undefined,
 		externalUrl: undefined,
 		dispatchArticle: undefined,
+		forwardedRef: null,
 		image: undefined
 	};
 
@@ -115,6 +118,7 @@ class WikiArticle extends Component<Props, State> {
 	}
 
 	render() {
+		const { forwardedRef } = this.props;
 		const {
 			description,
 			externalUrl,
@@ -131,6 +135,7 @@ class WikiArticle extends Component<Props, State> {
 			<article
 				className={`wa${isLoaded ? '' : ' loading'} style-0`}
 				data-id={id}
+				ref={forwardedRef}
 			>
 				<div className={`wa-header${image ? ' has-image' : ''}`}>
 					{image && (
@@ -164,9 +169,16 @@ class WikiArticle extends Component<Props, State> {
 	}
 }
 
+// forward ref forwarded by redux connect wrapper to base component
+const WikiArticleWithForwardedRef = React.forwardRef((props: Props, ref) => (
+	<WikiArticle {...props} forwardedRef={ref} />
+));
+
 const mapStateToProps = () => ({});
 const mapDispatchToProps = dispatch => ({
 	dispatchArticle: (data: SharedArticle): void => dispatch(addArticle(data))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(WikiArticle);
+export default connect(mapStateToProps, mapDispatchToProps, null, {
+	forwardRef: true
+})(WikiArticleWithForwardedRef);

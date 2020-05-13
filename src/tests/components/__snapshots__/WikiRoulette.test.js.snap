@@ -44,36 +44,147 @@ exports[`WikiRoulette renders the app 1`] = `
             <MountedArticle
               key="0"
             >
-              <Connect(WikiArticle)
+              <Connect(Component)
                 callback={[Function]}
               >
-                <WikiArticle
+                <Connect(Component)
                   callback={[Function]}
-                  dispatchArticle={[Function]}
-                >
-                  <article
-                    className="wa loading style-0"
-                  >
-                    <div
-                      className="wa-header"
-                    >
-                      <div
-                        className="wa-header-content"
-                      />
-                    </div>
-                    <div
-                      className="wa-content"
-                    >
-                      <a
-                        rel="noopener noreferrer"
-                        target="_blank"
+                  forwardedRef={
+                    Object {
+                      "current": <article
+                        class="wa style-0"
+                        data-id="someId"
                       >
-                        Test Link
-                      </a>
-                    </div>
-                  </article>
-                </WikiArticle>
-              </Connect(WikiArticle)>
+                        <div
+                          class="wa-header has-image"
+                        >
+                          <div
+                            aria-describedby="summary-someId"
+                            aria-labelledby="title-someId"
+                            class="wa-img"
+                            role="img"
+                            style="background-image: url(someimage.png);"
+                          />
+                          <div
+                            class="wa-header-content"
+                          >
+                            <h2
+                              class="wa-title"
+                            >
+                              Some Title
+                            </h2>
+                            <h3
+                              class="wa-description"
+                            >
+                              some description
+                            </h3>
+                          </div>
+                        </div>
+                        <div
+                          class="wa-content"
+                        >
+                          <p
+                            class="wa-summary"
+                            id="summary-someId"
+                          >
+                            some extract
+                          </p>
+                          <a
+                            href="someDesktopUrl.com"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            Test Link
+                          </a>
+                        </div>
+                      </article>,
+                    }
+                  }
+                >
+                  <ForwardRef
+                    callback={[Function]}
+                    dispatchArticle={[Function]}
+                  >
+                    <WikiArticle
+                      callback={[Function]}
+                      dispatchArticle={[Function]}
+                      forwardedRef={
+                        Object {
+                          "current": <article
+                            class="wa style-0"
+                            data-id="someId"
+                          >
+                            <div
+                              class="wa-header has-image"
+                            >
+                              <div
+                                aria-describedby="summary-someId"
+                                aria-labelledby="title-someId"
+                                class="wa-img"
+                                role="img"
+                                style="background-image: url(someimage.png);"
+                              />
+                              <div
+                                class="wa-header-content"
+                              >
+                                <h2
+                                  class="wa-title"
+                                >
+                                  Some Title
+                                </h2>
+                                <h3
+                                  class="wa-description"
+                                >
+                                  some description
+                                </h3>
+                              </div>
+                            </div>
+                            <div
+                              class="wa-content"
+                            >
+                              <p
+                                class="wa-summary"
+                                id="summary-someId"
+                              >
+                                some extract
+                              </p>
+                              <a
+                                href="someDesktopUrl.com"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                              >
+                                Test Link
+                              </a>
+                            </div>
+                          </article>,
+                        }
+                      }
+                    >
+                      <article
+                        className="wa loading style-0"
+                      >
+                        <div
+                          className="wa-header"
+                        >
+                          <div
+                            className="wa-header-content"
+                          />
+                        </div>
+                        <div
+                          className="wa-content"
+                        >
+                          <a
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            Test Link
+                          </a>
+                        </div>
+                      </article>
+                    </WikiArticle>
+                  </ForwardRef>
+                </Connect(Component)>
+              </Connect(Component)>
             </MountedArticle>
           </section>
         </Cylinder>

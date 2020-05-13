@@ -12,63 +12,72 @@ exports[`WikiArticle renders an article and fetches article data from Wikipedia 
     }
   }
 >
-  <Connect(WikiArticle)>
-    <WikiArticle
-      dispatchArticle={[Function]}
+  <Connect(Component)>
+    <Connect(Component)
+      forwardedRef={null}
     >
-      <article
-        className="wa style-0"
-        data-id="someId"
+      <ForwardRef
+        dispatchArticle={[Function]}
       >
-        <div
-          className="wa-header has-image"
+        <WikiArticle
+          dispatchArticle={[Function]}
+          forwardedRef={null}
         >
-          <div
-            aria-describedby="summary-someId"
-            aria-labelledby="title-someId"
-            className="wa-img"
-            role="img"
-            style={
-              Object {
-                "backgroundImage": "url('someimage.png')",
-              }
-            }
-          />
-          <div
-            className="wa-header-content"
+          <article
+            className="wa style-0"
+            data-id="someId"
           >
-            <h2
-              className="wa-title"
+            <div
+              className="wa-header has-image"
             >
-              Some Title
-            </h2>
-            <h3
-              className="wa-description"
+              <div
+                aria-describedby="summary-someId"
+                aria-labelledby="title-someId"
+                className="wa-img"
+                role="img"
+                style={
+                  Object {
+                    "backgroundImage": "url('someimage.png')",
+                  }
+                }
+              />
+              <div
+                className="wa-header-content"
+              >
+                <h2
+                  className="wa-title"
+                >
+                  Some Title
+                </h2>
+                <h3
+                  className="wa-description"
+                >
+                  some description
+                </h3>
+              </div>
+            </div>
+            <div
+              className="wa-content"
             >
-              some description
-            </h3>
-          </div>
-        </div>
-        <div
-          className="wa-content"
-        >
-          <p
-            className="wa-summary"
-            id="summary-someId"
-          >
-            some extract
-          </p>
-          <a
-            href="someDesktopUrl.com"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Test Link
-          </a>
-        </div>
-      </article>
-    </WikiArticle>
-  </Connect(WikiArticle)>
+              <p
+                className="wa-summary"
+                id="summary-someId"
+              >
+                some extract
+              </p>
+              <a
+                href="someDesktopUrl.com"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Test Link
+              </a>
+            </div>
+          </article>
+        </WikiArticle>
+      </ForwardRef>
+    </Connect(Component)>
+  </Connect(Component)>
 </Provider>
 `;
 
@@ -84,59 +93,76 @@ exports[`WikiArticle should not fetch article data if provided 1`] = `
     }
   }
 >
-  <Connect(WikiArticle)
+  <Connect(Component)
     description="Some description"
     id="someId"
     summary="Some summary."
     title="Some Title"
   >
-    <WikiArticle
+    <Connect(Component)
       description="Some description"
-      dispatchArticle={[Function]}
+      forwardedRef={null}
       id="someId"
       summary="Some summary."
       title="Some Title"
     >
-      <article
-        className="wa style-0"
-        data-id="someId"
+      <ForwardRef
+        description="Some description"
+        dispatchArticle={[Function]}
+        id="someId"
+        summary="Some summary."
+        title="Some Title"
       >
-        <div
-          className="wa-header"
+        <WikiArticle
+          description="Some description"
+          dispatchArticle={[Function]}
+          forwardedRef={null}
+          id="someId"
+          summary="Some summary."
+          title="Some Title"
         >
-          <div
-            className="wa-header-content"
+          <article
+            className="wa style-0"
+            data-id="someId"
           >
-            <h2
-              className="wa-title"
+            <div
+              className="wa-header"
             >
-              Some Title
-            </h2>
-            <h3
-              className="wa-description"
+              <div
+                className="wa-header-content"
+              >
+                <h2
+                  className="wa-title"
+                >
+                  Some Title
+                </h2>
+                <h3
+                  className="wa-description"
+                >
+                  Some description
+                </h3>
+              </div>
+            </div>
+            <div
+              className="wa-content"
             >
-              Some description
-            </h3>
-          </div>
-        </div>
-        <div
-          className="wa-content"
-        >
-          <p
-            className="wa-summary"
-            id="summary-someId"
-          >
-            Some summary.
-          </p>
-          <a
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Test Link
-          </a>
-        </div>
-      </article>
-    </WikiArticle>
-  </Connect(WikiArticle)>
+              <p
+                className="wa-summary"
+                id="summary-someId"
+              >
+                Some summary.
+              </p>
+              <a
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Test Link
+              </a>
+            </div>
+          </article>
+        </WikiArticle>
+      </ForwardRef>
+    </Connect(Component)>
+  </Connect(Component)>
 </Provider>
 `;
