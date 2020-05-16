@@ -42,7 +42,13 @@ exports[`WikiRoulette renders the app 1`] = `
             onClick={[Function]}
             type="button"
           >
-            Show Modal
+            Show Modal 1
+          </button>
+          <button
+            onClick={[Function]}
+            type="button"
+          >
+            Show Modal 2
           </button>
           <section
             className="articles"
@@ -194,6 +200,36 @@ exports[`WikiRoulette renders the app 1`] = `
             </MountedArticle>
           </section>
           <Modal
+            id="modal-1"
+            onHide={[Function]}
+            show={false}
+          >
+            <CSSTransition
+              classNames="wa-modal"
+              in={false}
+              timeout={300}
+              unmountOnExit={true}
+            >
+              <Transition
+                appear={false}
+                enter={true}
+                exit={true}
+                in={false}
+                mountOnEnter={false}
+                onEnter={[Function]}
+                onEntered={[Function]}
+                onEntering={[Function]}
+                onExit={[Function]}
+                onExited={[Function]}
+                onExiting={[Function]}
+                timeout={300}
+                unmountOnExit={true}
+              />
+            </CSSTransition>
+          </Modal>
+          <Modal
+            className="test"
+            id="modal-2"
             onHide={[Function]}
             show={false}
           >

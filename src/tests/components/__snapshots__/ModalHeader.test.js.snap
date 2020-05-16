@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ModalHeader should render a modal header 1`] = `
+<header
+  className="wa-modal-header"
+/>
+`;
+
+exports[`ModalHeader should render a modal header with a close button 1`] = `
+<header
+  className="wa-modal-header"
+>
+  <button
+    className="wa-modal-close"
+    onClick={[Function]}
+    type="button"
+  >
+    X
+  </button>
+</header>
+`;

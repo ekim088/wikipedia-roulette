@@ -1,4 +1,5 @@
 import Modal from '../../components/Modal';
+import ModalHeader from '../../components/ModalHeader';
 
 describe('Modal', () => {
 	const documentAddEventListenerFxn = document.addEventListener;
@@ -21,17 +22,53 @@ describe('Modal', () => {
 		window.removeEventListener = windowRemoveEventListenerFxn;
 	});
 
-	it('should render a modal with a close button and content div', () => {
+	it('should render a modal', () => {
 		const wrapper = shallow(<Modal show onHide={jest.fn()} />);
 		expect(wrapper).toMatchSnapshot();
 	});
 
-	it('should call the onHide method on click of the close button', () => {
-		const mockOnHide = jest.fn();
-		shallow(<Modal show onHide={mockOnHide} />)
-			.find('button')
-			.simulate('click');
-		expect(mockOnHide).toHaveBeenCalled();
+	it('should render a modal with body content', () => {
+		const wrapper = shallow(
+			<Modal show onHide={jest.fn()}>
+				This is the body content.
+			</Modal>
+		);
+		expect(wrapper).toMatchSnapshot();
+	});
+
+	it('should have a static Header property that contains the ModalHeader component', () => {
+		expect(Modal.Header).toBe(ModalHeader);
+	});
+
+	it('should render a modal with a header', () => {
+		const wrapper = shallow(
+			<Modal show onHide={jest.fn()}>
+				<Modal.Header />
+				This is the body content.
+			</Modal>
+		);
+		expect(wrapper).toMatchSnapshot();
+	});
+
+	it('should call the onHide method on click of the close button in the modal header', async () => {
+		const mockClickHandler = jest.fn();
+		const wrapper = mount(
+			<Modal show onHide={jest.fn()}>
+				<Modal.Header closeButton />
+				This is the body content.
+			</Modal>
+		);
+
+		const closeButton = wrapper.find('button.wa-modal-close');
+		closeButton.simulate('click');
+
+		/**
+		 * somehow wrapping expect in timeout waits for click response to occur
+		 * but `act` does not?
+		 */
+		setTimeout(() => {
+			expect(mockClickHandler).toHaveBeenCalled();
+		});
 	});
 
 	it('should setup event listeners to manage modal on mount', () => {
@@ -69,19 +106,19 @@ describe('Modal', () => {
 		 */
 		document.addEventListener = jest.fn(eventMapBasedListener);
 		document.removeEventListener = jest.fn();
-		const onHide = jest.fn();
-		const wrapper = mount(<Modal show onHide={onHide} />);
+		const mockClickHandler = jest.fn();
+		const wrapper = mount(<Modal show onHide={mockClickHandler} />);
 
 		// simulate click inside modal
 		const modalNode = wrapper.find('.wa-modal').getDOMNode();
 		eventMap.click({ target: modalNode });
-		expect(onHide).not.toHaveBeenCalled();
+		expect(mockClickHandler).not.toHaveBeenCalled();
 
 		// simulate click outside modal
 		const modalContainerNode = wrapper.find('.wa-modal-container').getDOMNode();
 		const mockEventWithOutsideEl = { target: modalContainerNode };
 		eventMap.click(mockEventWithOutsideEl);
-		expect(onHide).toHaveBeenCalledWith(mockEventWithOutsideEl);
+		expect(mockClickHandler).toHaveBeenCalledWith(mockEventWithOutsideEl);
 	});
 
 	it('should trigger onHide function when pressing escape key', () => {
@@ -91,20 +128,21 @@ describe('Modal', () => {
 		 */
 		window.addEventListener = jest.fn(eventMapBasedListener);
 		window.removeEventListener = jest.fn();
-		const onHide = jest.fn();
-		mount(<Modal show onHide={onHide} />);
+		const mockClickHandler = jest.fn();
+		mount(<Modal show onHide={mockClickHandler} />);
 
 		// simulate enter key press
 		eventMap.keyup({ keyCode: 13 });
-		expect(onHide).not.toHaveBeenCalled();
+		expect(mockClickHandler).not.toHaveBeenCalled();
 
 		// simulate escape key press
 		const mockEvent = {
 			keyCode: 27,
-			preventDefault: jest.fn()
+			preventDefault: jest.fn(),
+			stopPropagation: jest.fn()
 		};
 		eventMap.keyup(mockEvent);
-		expect(onHide).toHaveBeenCalledWith(mockEvent);
+		expect(mockClickHandler).toHaveBeenCalledWith(mockEvent);
 		expect(mockEvent.preventDefault).toHaveBeenCalled();
 	});
 });
