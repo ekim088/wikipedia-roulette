@@ -1,6 +1,12 @@
 import WikiRoulette from '../../components/WikiRoulette';
 import { wikipediaHandlerTestUtil } from '../mocks';
 
+// prevent random number generation
+jest.mock('../../utils/keygen', () => ({
+	generateKey: jest.fn(() => '0'),
+	storeKey: jest.fn()
+}));
+
 describe('WikiRoulette', () => {
 	let container;
 

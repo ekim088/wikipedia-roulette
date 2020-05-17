@@ -21,12 +21,7 @@ const Modal = ({ children, className, onHide, show, ...rest }: Props) => {
 	const modalRef: { current: any } = useRef(null);
 
 	const handleHide = useEventCallback(onHide);
-	const modalContext = useMemo(
-		() => ({
-			onHide: handleHide
-		}),
-		[handleHide]
-	);
+	const modalContext = useMemo(() => ({ onHide: handleHide }), [handleHide]);
 
 	/**
 	 * Call `onHide` handler from parent composite component on press of

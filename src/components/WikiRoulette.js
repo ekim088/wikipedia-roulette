@@ -3,12 +3,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Cylinder from './Cylinder';
-import type { SharedArticle } from './WikiArticle';
+import type { Article } from './WikiArticle';
 import '../scss/_WikiRoulette.scss';
 
 // flow types
 type Props = {
-	articles: ?Array<SharedArticle> // eslint-disable-line react/no-unused-prop-types
+	articles: ?Array<Article> // eslint-disable-line react/no-unused-prop-types
 };
 
 type State = {};
@@ -16,11 +16,11 @@ type State = {};
 class WikiRoulette extends Component<Props, State> {
 	render() {
 		return (
-			<div className="WikiRoulette">
-				<div className="backdrop" />
-				<pre>{JSON.stringify(this.props)}</pre>
+			<section className="wikiroulette">
+				{/* <pre>{JSON.stringify(this.props)}</pre> */}
 				<Cylinder />
-			</div>
+				<ul id="shortcuts" />
+			</section>
 		);
 	}
 }

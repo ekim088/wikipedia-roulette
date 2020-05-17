@@ -1,71 +1,143 @@
 // @flow
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import useEventCallback from '@restart/hooks/useEventCallback';
+import CylinderContext from './CylinderContext';
 import MountedArticle from './MountedArticle';
+import { generateKey, storeKey } from '../utils/keygen';
+import type { Article } from './WikiArticle';
+import '../scss/_Cylinder.scss';
 
-import Modal from './Modal';
-
-type Props = {
-	articles?: Array<React.Node>
+type ArticleWithKey = {
+	...Article,
+	key?: string
 };
 
-const Cylinder = ({ articles: articlesProp }: Props) => {
+type Props = {
+	articles?: Array<ArticleWithKey>
+};
+
+const Cylinder = ({ articles: articlesProp = [] }: Props) => {
+	// indicates the currently active article by element ID
+	const [activeId, setActiveId] = useState();
+
+	// an array of article data to be passed as props to `WikiArticle`
 	const [articles, setArticles] = useState(articlesProp);
-	const appendArticle = () =>
-		Array.isArray(articles) &&
-		setArticles([...articles, <MountedArticle key={articles.length} />]);
 
-	// modal testing
-	const [showModal, setShowModal] = useState(false);
-	const openModal = () => setShowModal(true);
-	const closeModal = () => setShowModal(false);
+	// toggles the ability to add articles, disabled while another is loading
+	const [appendIsEnabled, setAppendIsEnabled] = useState(true);
 
-	const [showModal2, setShowModal2] = useState(false);
-	const openModal2 = () => setShowModal2(true);
-	const closeModal2 = () => setShowModal2(false);
+	// applies inline tranformation styling to move the cylinder
+	const [style, setStyle] = useState({});
+
+	/**
+	 * Appends a new article.
+	 */
+	const appendArticle = () => {
+		setAppendIsEnabled(false);
+		setArticles([...articles, {}]);
+	};
+
+	/**
+	 * Passed as callback function to `WikiArticle` to re-enabled append
+	 * button once article data has loaded.
+	 */
+	const enableAppendButton = () => setAppendIsEnabled(true);
+
+	/**
+	 * Updates the active article ID.
+	 */
+	const highlightActive = useEventCallback(id => setActiveId(id));
+
+	/**
+	 * Updates the position of the cylinder.
+	 */
+	const spin = useEventCallback((offset: ?number) =>
+		setStyle({
+			transform: `translateY(-${offset || 0}px)`
+		})
+	);
+
+	/**
+	 * Context to be passed to articles to update Cylinder state.
+	 */
+	const cylinderContext = useMemo(() => ({ highlightActive, spin }), [
+		highlightActive,
+		spin
+	]);
+
+	/**
+	 * initialize article if none provided, doing in `useEffect` also allows
+	 * `CSSTransition` to affect initial article
+	 */
+	useEffect(() => {
+		if (articles.length === 0) appendArticle();
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+	// mounted articles to render with animation and context wrappers applied
+	const articlesToMount = articles.map(article => {
+		const articleData = article;
+		const { key: keyProp, ...rest } = articleData;
+		let key = keyProp;
+
+		if (!key) {
+			key = generateKey();
+			articleData.key = key;
+		} else {
+			storeKey(key);
+		}
+
+		return (
+			<CSSTransition
+				key={`article-transition-${key}`}
+				timeout={300}
+				classNames="articles-item"
+			>
+				<li>
+					<CylinderContext.Provider
+						key={`article-context-${key}`}
+						value={cylinderContext}
+					>
+						<MountedArticle
+							{...rest}
+							id={`article-${key}`}
+							isActive={activeId === `article-${key}`}
+							onArticleLoad={enableAppendButton}
+						/>
+					</CylinderContext.Provider>
+				</li>
+			</CSSTransition>
+		);
+	});
 
 	return (
 		<>
-			<button type="button" onClick={appendArticle}>
-				Add article
-			</button>
-			<button type="button" onClick={openModal}>
-				Show Modal 1
-			</button>
-			<button type="button" onClick={openModal2}>
-				Show Modal 2
-			</button>
-			<section className="articles">
-				{Array.isArray(articles) && articles.slice(0)}
-			</section>
-			<Modal show={showModal} id="modal-1" onHide={closeModal}>
-				<Modal.Header closeButton>Modal 1</Modal.Header>
-				<p>
-					Donec sed odio dui. Aenean eu leo quam. Pellentesque ornare sem
-					lacinia quam venenatis vestibulum.
-				</p>
-			</Modal>
-
-			<Modal
-				className="test"
-				show={showModal2}
-				id="modal-2"
-				onHide={closeModal2}
-			>
-				<Modal.Header>Modal 2</Modal.Header>
-				<p>
-					Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
-					ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-					Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
-					nibh, ut fermentum massa justo sit amet risus.
-				</p>
-			</Modal>
+			<div style={{ position: 'absolute', top: 0, left: 0 }}>
+				TEMP PLACEMENT
+				<button
+					type="button"
+					onClick={appendArticle}
+					disabled={!appendIsEnabled}
+				>
+					Add article
+				</button>
+			</div>
+			<div className="articles-container">
+				<TransitionGroup
+					className="articles"
+					component="ul"
+					{...(Object.keys(style).length > 0 ? { style } : {})}
+				>
+					{articlesToMount}
+				</TransitionGroup>
+			</div>
 		</>
 	);
 };
 
 Cylinder.defaultProps = {
-	articles: [<MountedArticle key="0" />]
+	articles: []
 };
 
 export default Cylinder;

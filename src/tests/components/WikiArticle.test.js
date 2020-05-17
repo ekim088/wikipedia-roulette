@@ -48,11 +48,24 @@ describe('WikiArticle', () => {
 		expect(wrapper).toMatchSnapshot();
 	});
 
+	it('should apply an id and accessibility attributes to article', async () => {
+		const wrapper = mount(
+			<Provider store={configureStore()}>
+				<WikiArticle id="someId" />
+			</Provider>
+		);
+
+		// wait for component to finish async calls and update state
+		await act(async () => {});
+		wrapper.update();
+		expect(wrapper).toMatchSnapshot();
+	});
+
 	it('should not fetch article data if provided', async () => {
 		const wrapper = mount(
 			<Provider store={configureStore()}>
 				<WikiArticle
-					id="someId"
+					articleId="someId"
 					title="Some Title"
 					description="Some description"
 					summary="Some summary."
@@ -70,9 +83,9 @@ describe('WikiArticle', () => {
 
 	it('should translate the article response data on parseArticleSummary', () => {
 		expect(parseArticleSummary(mockWikipediaData)).toEqual({
+			articleId: 'someId',
 			description: 'some description',
 			externalUrl: 'someDesktopUrl.com',
-			id: 'someId',
 			image: 'someimage.png',
 			summary: 'some extract',
 			title: 'Some Title'

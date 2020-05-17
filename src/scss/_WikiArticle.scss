@@ -2,8 +2,8 @@
 
 .wa {
 	position: relative;
-	box-sizing: border-box;
 	width: $article-width;
+	min-height: $article-height;
 	margin: 0 auto;
 	padding: $article-padding;
 	border-radius: $border-radius;

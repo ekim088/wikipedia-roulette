@@ -1,42 +1,67 @@
 // @flow
-import React, { useState, useRef } from 'react';
-import WikiArticle from './WikiArticle';
-import type { Props as WikiArticleProps, SharedArticle } from './WikiArticle';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import useEventCallback from '@restart/hooks/useEventCallback';
 import AppendToBody from './AppendToBody';
+import CylinderContext from './CylinderContext';
+import WikiArticle from './WikiArticle';
+import type { Article, Props as WikiArticleProps } from './WikiArticle';
 
 type Props = {
-	...WikiArticleProps
+	...WikiArticleProps,
+	isActive?: boolean
 };
 
-const MountedArticle = (props: Props) => {
-	const { title: titleProp, description: descriptionProp } = props;
-	const [title, setTitle] = useState(titleProp);
+const MountedArticle = ({ isActive, ...rest }: Props) => {
+	const {
+		description: descriptionProp,
+		id,
+		onArticleLoad,
+		title: titleProp
+	} = rest;
 	const [description, setDescription] = useState(descriptionProp);
-	const updateArticleData = (data: SharedArticle) => {
-		setTitle(data.title);
-		setDescription(data.description);
-	};
+	const [title, setTitle] = useState(titleProp);
 	const articleRef = useRef(null);
-	let testToggle = false;
+	const context = useContext(CylinderContext);
 
-	const updateRef = () => {
+	/**
+	 * Calls parent context methods to center/highlight this article into view.
+	 */
+	const spinIntoView = useEventCallback(() => {
 		if (articleRef.current) {
-			if (!testToggle) {
-				articleRef.current.style.border = '2px dashed red';
-			} else {
-				articleRef.current.style.border = '';
-			}
-
-			testToggle = !testToggle;
+			const offset = articleRef.current.offsetTop;
+			if (context) context.spin(offset);
+			if (context) context.highlightActive(id);
 		}
+	});
+
+	/**
+	 * Updates local article data to initiate render of toggle button.
+	 * @param {Object} data Article data shared by `WikiArticle`.
+	 */
+	const updateArticleData = (data: Article) => {
+		setDescription(data.description);
+		setTitle(data.title);
 	};
+
+	// spin cylinder on mount
+	useEffect(() => {
+		spinIntoView();
+	}, [spinIntoView]);
 
 	return (
 		<>
-			<WikiArticle {...props} callback={updateArticleData} ref={articleRef} />
+			<WikiArticle
+				{...rest}
+				className={isActive ? 'active' : ''}
+				onArticleLoad={data => {
+					if (onArticleLoad) onArticleLoad(data);
+					updateArticleData(data);
+				}}
+				ref={articleRef}
+			/>
 			{title && description && (
-				<AppendToBody>
-					<button type="button" onClick={updateRef}>
+				<AppendToBody containerSelector="#shortcuts">
+					<button type="button" onClick={spinIntoView}>
 						<span>{title}</span>
 						<span>{description}</span>
 					</button>
@@ -46,6 +71,9 @@ const MountedArticle = (props: Props) => {
 	);
 };
 
-MountedArticle.defaultProps = { ...WikiArticle.defaultProps };
+MountedArticle.defaultProps = {
+	...WikiArticle.defaultProps,
+	isActive: false
+};
 
 export default MountedArticle;

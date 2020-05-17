@@ -1,0 +1,43 @@
+@import 'variables';
+
+.articles {
+	position: absolute;
+	width: $article-width;
+	margin: 0 auto;
+	padding: 0;
+	transition: transform $transition-duration $transition-timing;
+
+	li {
+		margin: 0 0 40px 0;
+		list-style-type: none;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
+
+.articles-container {
+	position: relative;
+	top: 50%;
+	left: 50%;
+	width: $article-width;
+	height: $article-height;
+	transform: translate(-50%, -50%);
+}
+
+.articles {
+	.wa {
+		transform: translateY(10px) scale(0.95);
+		opacity: 0;
+	}
+
+	.articles-item-enter-done .wa {
+		transform: translateY(0) scale(1);
+		opacity: 0.3;
+
+		&.active {
+			opacity: 1;
+		}
+	}
+}

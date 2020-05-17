@@ -11,25 +11,22 @@ import defaultImg from '../default-article-image.jpg';
 import addArticle from '../actions/addArticle';
 
 // flow types
-type Article = {
+export type Article = {
+	articleId: ?string,
 	description: ?string,
 	externalUrl?: string,
-	id: ?string,
 	image?: string,
 	summary: ?string,
 	title: ?string
 };
 
-export type SharedArticle = {
-	title: ?string,
-	description: ?string
-};
-
 export type Props = {
 	...Article,
-	callback?: SharedArticle => any,
-	dispatchArticle?: SharedArticle => void,
-	forwardedRef?: React.ElementRef<any>
+	className?: string,
+	dispatchArticle?: Article => void,
+	forwardedRef?: React.ElementRef<any>,
+	id?: string,
+	onArticleLoad?: Article => void
 };
 
 type State = {
@@ -50,41 +47,51 @@ export const parseArticleSummary = ({
 	thumbnail: { source } = {},
 	title
 }: ArticleResponse): Article => ({
+	articleId: pageid,
 	description,
 	externalUrl:
 		(contentUrls && contentUrls.desktop && contentUrls.desktop.page) || '',
-	id: pageid,
 	image: source || defaultImg,
 	summary: extract,
 	title
 });
 
 class WikiArticle extends Component<Props, State> {
+	// eslint-disable-next-line react/static-property-placement
 	static defaultProps = {
-		callback: undefined,
+		className: undefined,
 		externalUrl: undefined,
 		dispatchArticle: undefined,
 		forwardedRef: null,
-		image: undefined
+		id: undefined,
+		image: undefined,
+		onArticleLoad: undefined
 	};
 
 	constructor(props: Props) {
 		super(props);
 
-		const { description, externalUrl, id, image, summary, title } = props;
-		this.state = {
+		const {
+			articleId,
 			description,
 			externalUrl,
-			id,
+			image,
+			summary,
+			title
+		} = props;
+		this.state = {
+			articleId,
+			description,
+			externalUrl,
 			image,
 			summary,
 			title,
-			isLoaded: !!(id && title && description && summary)
+			isLoaded: !!(articleId && title && description && summary)
 		};
 	}
 
 	async componentDidMount() {
-		const { callback, dispatchArticle } = this.props;
+		const { dispatchArticle, onArticleLoad } = this.props;
 		const { isLoaded } = this.state;
 
 		// fetch Wikipedia article and update state if data not available
@@ -93,16 +100,30 @@ class WikiArticle extends Component<Props, State> {
 		}
 
 		// apply article data to shared state
-		const { title, description } = this.state;
-		const sharedArticleData = { title, description };
+		const {
+			articleId,
+			description,
+			externalUrl,
+			image,
+			summary,
+			title
+		} = this.state;
+		const articleData = {
+			articleId,
+			description,
+			externalUrl,
+			image,
+			summary,
+			title
+		};
 
 		if (typeof dispatchArticle === 'function') {
-			dispatchArticle(sharedArticleData);
+			dispatchArticle(articleData);
 		}
 
-		// perform post-mount callback
-		if (typeof callback === 'function') {
-			callback(sharedArticleData);
+		// perform post article load callback
+		if (typeof onArticleLoad === 'function') {
+			onArticleLoad(articleData);
 		}
 	}
 
@@ -118,48 +139,66 @@ class WikiArticle extends Component<Props, State> {
 	}
 
 	render() {
-		const { forwardedRef } = this.props;
+		const { className, forwardedRef, id } = this.props;
 		const {
+			articleId,
 			description,
 			externalUrl,
-			id,
 			image,
 			isLoaded,
 			summary,
 			title
 		} = this.state;
-		const summaryId: ?string = id ? `summary-${id}` : null;
-		const titleId: ?string = id ? `title-${id}` : null;
+		const articleClasses = `wa style-0${isLoaded ? '' : ' loading'}${
+			className ? ` ${className}` : ''
+		}`;
+		let descriptionId: ?string;
+		let titleId: ?string;
+		let accessibilityProps = {};
+
+		if (id) {
+			descriptionId = id ? `description-${id}` : null;
+			titleId = id ? `title-${id}` : null;
+			accessibilityProps = {
+				'aria-labelledby': titleId,
+				'aria-describedby': descriptionId
+			};
+		}
 
 		return (
 			<article
-				className={`wa${isLoaded ? '' : ' loading'} style-0`}
-				data-id={id}
+				className={articleClasses}
+				data-id={articleId}
 				ref={forwardedRef}
+				{...(id ? { id } : {})}
 			>
 				<div className={`wa-header${image ? ' has-image' : ''}`}>
 					{image && (
 						<div
+							{...accessibilityProps}
 							className="wa-img"
 							style={{ backgroundImage: `url('${image}')` }}
 							role="img"
-							aria-labelledby={titleId}
-							aria-describedby={summaryId}
 						/>
 					)}
 					<div className="wa-header-content">
-						{title && <h2 className="wa-title">{trim(title, 50)}</h2>}
+						{title && (
+							<h2 className="wa-title" {...(titleId ? { id: titleId } : {})}>
+								{trim(title, 50)}
+							</h2>
+						)}
 						{description && (
-							<h3 className="wa-description">{trim(description, 100)}</h3>
+							<h3
+								className="wa-description"
+								{...(descriptionId ? { id: descriptionId } : {})}
+							>
+								{trim(description, 100)}
+							</h3>
 						)}
 					</div>
 				</div>
 				<div className="wa-content">
-					{summary && (
-						<p className="wa-summary" id={summaryId}>
-							{trim(summary, 250)}
-						</p>
-					)}
+					{summary && <p className="wa-summary">{trim(summary, 250)}</p>}
 					<a href={externalUrl} target="_blank" rel="noopener noreferrer">
 						Test Link
 					</a>
@@ -176,7 +215,7 @@ const WikiArticleWithForwardedRef = React.forwardRef((props: Props, ref) => (
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = dispatch => ({
-	dispatchArticle: (data: SharedArticle): void => dispatch(addArticle(data))
+	dispatchArticle: (data: Article): void => dispatch(addArticle(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps, null, {

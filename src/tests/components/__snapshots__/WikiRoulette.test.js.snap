@@ -16,248 +16,245 @@ exports[`WikiRoulette renders the app 1`] = `
     <WikiRoulette
       articles={Array []}
     >
-      <div
-        className="WikiRoulette"
+      <section
+        className="wikiroulette"
       >
-        <div
-          className="backdrop"
-        />
-        <pre>
-          {"articles":[]}
-        </pre>
         <Cylinder
-          articles={
-            Array [
-              <MountedArticle />,
-            ]
-          }
+          articles={Array []}
         >
-          <button
-            onClick={[Function]}
-            type="button"
+          <div
+            style={
+              Object {
+                "left": 0,
+                "position": "absolute",
+                "top": 0,
+              }
+            }
           >
-            Add article
-          </button>
-          <button
-            onClick={[Function]}
-            type="button"
-          >
-            Show Modal 1
-          </button>
-          <button
-            onClick={[Function]}
-            type="button"
-          >
-            Show Modal 2
-          </button>
-          <section
-            className="articles"
-          >
-            <MountedArticle
-              key="0"
+            TEMP PLACEMENT
+            <button
+              disabled={true}
+              onClick={[Function]}
+              type="button"
             >
-              <Connect(Component)
-                callback={[Function]}
-              >
-                <Connect(Component)
-                  callback={[Function]}
-                  forwardedRef={
-                    Object {
-                      "current": <article
-                        class="wa style-0"
-                        data-id="someId"
-                      >
-                        <div
-                          class="wa-header has-image"
-                        >
-                          <div
-                            aria-describedby="summary-someId"
-                            aria-labelledby="title-someId"
-                            class="wa-img"
-                            role="img"
-                            style="background-image: url(someimage.png);"
-                          />
-                          <div
-                            class="wa-header-content"
-                          >
-                            <h2
-                              class="wa-title"
-                            >
-                              Some Title
-                            </h2>
-                            <h3
-                              class="wa-description"
-                            >
-                              some description
-                            </h3>
-                          </div>
-                        </div>
-                        <div
-                          class="wa-content"
-                        >
-                          <p
-                            class="wa-summary"
-                            id="summary-someId"
-                          >
-                            some extract
-                          </p>
-                          <a
-                            href="someDesktopUrl.com"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                          >
-                            Test Link
-                          </a>
-                        </div>
-                      </article>,
-                    }
+              Add article
+            </button>
+          </div>
+          <div
+            className="articles-container"
+          >
+            <TransitionGroup
+              childFactory={[Function]}
+              className="articles"
+              component="ul"
+              style={
+                Object {
+                  "transform": "translateY(-0px)",
+                }
+              }
+            >
+              <ul
+                className="articles"
+                style={
+                  Object {
+                    "transform": "translateY(-0px)",
                   }
+                }
+              >
+                <CSSTransition
+                  classNames="articles-item"
+                  in={true}
+                  key=".$article-transition-0"
+                  onExited={[Function]}
+                  timeout={300}
                 >
-                  <ForwardRef
-                    callback={[Function]}
-                    dispatchArticle={[Function]}
+                  <Transition
+                    appear={false}
+                    enter={true}
+                    exit={true}
+                    in={true}
+                    mountOnEnter={false}
+                    onEnter={[Function]}
+                    onEntered={[Function]}
+                    onEntering={[Function]}
+                    onExit={[Function]}
+                    onExited={[Function]}
+                    onExiting={[Function]}
+                    timeout={300}
+                    unmountOnExit={false}
                   >
-                    <WikiArticle
-                      callback={[Function]}
-                      dispatchArticle={[Function]}
-                      forwardedRef={
-                        Object {
-                          "current": <article
-                            class="wa style-0"
-                            data-id="someId"
-                          >
-                            <div
-                              class="wa-header has-image"
-                            >
-                              <div
-                                aria-describedby="summary-someId"
-                                aria-labelledby="title-someId"
-                                class="wa-img"
-                                role="img"
-                                style="background-image: url(someimage.png);"
-                              />
-                              <div
-                                class="wa-header-content"
-                              >
-                                <h2
-                                  class="wa-title"
-                                >
-                                  Some Title
-                                </h2>
-                                <h3
-                                  class="wa-description"
-                                >
-                                  some description
-                                </h3>
-                              </div>
-                            </div>
-                            <div
-                              class="wa-content"
-                            >
-                              <p
-                                class="wa-summary"
-                                id="summary-someId"
-                              >
-                                some extract
-                              </p>
-                              <a
-                                href="someDesktopUrl.com"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                Test Link
-                              </a>
-                            </div>
-                          </article>,
-                        }
-                      }
-                    >
-                      <article
-                        className="wa loading style-0"
+                    <li>
+                      <MountedArticle
+                        id="article-0"
+                        isActive={true}
+                        onArticleLoad={[Function]}
                       >
-                        <div
-                          className="wa-header"
+                        <Connect(Component)
+                          className="active"
+                          id="article-0"
+                          onArticleLoad={[Function]}
                         >
-                          <div
-                            className="wa-header-content"
-                          />
-                        </div>
-                        <div
-                          className="wa-content"
-                        >
-                          <a
-                            rel="noopener noreferrer"
-                            target="_blank"
+                          <Connect(Component)
+                            className="active"
+                            forwardedRef={
+                              Object {
+                                "current": <article
+                                  class="wa style-0 active"
+                                  data-id="someId"
+                                  id="article-0"
+                                >
+                                  <div
+                                    class="wa-header has-image"
+                                  >
+                                    <div
+                                      aria-describedby="description-article-0"
+                                      aria-labelledby="title-article-0"
+                                      class="wa-img"
+                                      role="img"
+                                      style="background-image: url(someimage.png);"
+                                    />
+                                    <div
+                                      class="wa-header-content"
+                                    >
+                                      <h2
+                                        class="wa-title"
+                                        id="title-article-0"
+                                      >
+                                        Some Title
+                                      </h2>
+                                      <h3
+                                        class="wa-description"
+                                        id="description-article-0"
+                                      >
+                                        some description
+                                      </h3>
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="wa-content"
+                                  >
+                                    <p
+                                      class="wa-summary"
+                                    >
+                                      some extract
+                                    </p>
+                                    <a
+                                      href="someDesktopUrl.com"
+                                      rel="noopener noreferrer"
+                                      target="_blank"
+                                    >
+                                      Test Link
+                                    </a>
+                                  </div>
+                                </article>,
+                              }
+                            }
+                            id="article-0"
+                            onArticleLoad={[Function]}
                           >
-                            Test Link
-                          </a>
-                        </div>
-                      </article>
-                    </WikiArticle>
-                  </ForwardRef>
-                </Connect(Component)>
-              </Connect(Component)>
-            </MountedArticle>
-          </section>
-          <Modal
-            id="modal-1"
-            onHide={[Function]}
-            show={false}
-          >
-            <CSSTransition
-              classNames="wa-modal"
-              in={false}
-              timeout={300}
-              unmountOnExit={true}
-            >
-              <Transition
-                appear={false}
-                enter={true}
-                exit={true}
-                in={false}
-                mountOnEnter={false}
-                onEnter={[Function]}
-                onEntered={[Function]}
-                onEntering={[Function]}
-                onExit={[Function]}
-                onExited={[Function]}
-                onExiting={[Function]}
-                timeout={300}
-                unmountOnExit={true}
-              />
-            </CSSTransition>
-          </Modal>
-          <Modal
-            className="test"
-            id="modal-2"
-            onHide={[Function]}
-            show={false}
-          >
-            <CSSTransition
-              classNames="wa-modal"
-              in={false}
-              timeout={300}
-              unmountOnExit={true}
-            >
-              <Transition
-                appear={false}
-                enter={true}
-                exit={true}
-                in={false}
-                mountOnEnter={false}
-                onEnter={[Function]}
-                onEntered={[Function]}
-                onEntering={[Function]}
-                onExit={[Function]}
-                onExited={[Function]}
-                onExiting={[Function]}
-                timeout={300}
-                unmountOnExit={true}
-              />
-            </CSSTransition>
-          </Modal>
+                            <ForwardRef
+                              className="active"
+                              dispatchArticle={[Function]}
+                              id="article-0"
+                              onArticleLoad={[Function]}
+                            >
+                              <WikiArticle
+                                className="active"
+                                dispatchArticle={[Function]}
+                                forwardedRef={
+                                  Object {
+                                    "current": <article
+                                      class="wa style-0 active"
+                                      data-id="someId"
+                                      id="article-0"
+                                    >
+                                      <div
+                                        class="wa-header has-image"
+                                      >
+                                        <div
+                                          aria-describedby="description-article-0"
+                                          aria-labelledby="title-article-0"
+                                          class="wa-img"
+                                          role="img"
+                                          style="background-image: url(someimage.png);"
+                                        />
+                                        <div
+                                          class="wa-header-content"
+                                        >
+                                          <h2
+                                            class="wa-title"
+                                            id="title-article-0"
+                                          >
+                                            Some Title
+                                          </h2>
+                                          <h3
+                                            class="wa-description"
+                                            id="description-article-0"
+                                          >
+                                            some description
+                                          </h3>
+                                        </div>
+                                      </div>
+                                      <div
+                                        class="wa-content"
+                                      >
+                                        <p
+                                          class="wa-summary"
+                                        >
+                                          some extract
+                                        </p>
+                                        <a
+                                          href="someDesktopUrl.com"
+                                          rel="noopener noreferrer"
+                                          target="_blank"
+                                        >
+                                          Test Link
+                                        </a>
+                                      </div>
+                                    </article>,
+                                  }
+                                }
+                                id="article-0"
+                                onArticleLoad={[Function]}
+                              >
+                                <article
+                                  className="wa style-0 loading active"
+                                  id="article-0"
+                                >
+                                  <div
+                                    className="wa-header"
+                                  >
+                                    <div
+                                      className="wa-header-content"
+                                    />
+                                  </div>
+                                  <div
+                                    className="wa-content"
+                                  >
+                                    <a
+                                      rel="noopener noreferrer"
+                                      target="_blank"
+                                    >
+                                      Test Link
+                                    </a>
+                                  </div>
+                                </article>
+                              </WikiArticle>
+                            </ForwardRef>
+                          </Connect(Component)>
+                        </Connect(Component)>
+                      </MountedArticle>
+                    </li>
+                  </Transition>
+                </CSSTransition>
+              </ul>
+            </TransitionGroup>
+          </div>
         </Cylinder>
-      </div>
+        <ul
+          id="shortcuts"
+        />
+      </section>
     </WikiRoulette>
   </Connect(WikiRoulette)>
 </Provider>

@@ -31,8 +31,6 @@ exports[`WikiArticle renders an article and fetches article data from Wikipedia 
               className="wa-header has-image"
             >
               <div
-                aria-describedby="summary-someId"
-                aria-labelledby="title-someId"
                 className="wa-img"
                 role="img"
                 style={
@@ -61,7 +59,94 @@ exports[`WikiArticle renders an article and fetches article data from Wikipedia 
             >
               <p
                 className="wa-summary"
-                id="summary-someId"
+              >
+                some extract
+              </p>
+              <a
+                href="someDesktopUrl.com"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Test Link
+              </a>
+            </div>
+          </article>
+        </WikiArticle>
+      </ForwardRef>
+    </Connect(Component)>
+  </Connect(Component)>
+</Provider>
+`;
+
+exports[`WikiArticle should apply an id and accessibility attributes to article 1`] = `
+<Provider
+  store={
+    Object {
+      "dispatch": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+      Symbol(observable): [Function],
+    }
+  }
+>
+  <Connect(Component)
+    id="someId"
+  >
+    <Connect(Component)
+      forwardedRef={null}
+      id="someId"
+    >
+      <ForwardRef
+        dispatchArticle={[Function]}
+        id="someId"
+      >
+        <WikiArticle
+          dispatchArticle={[Function]}
+          forwardedRef={null}
+          id="someId"
+        >
+          <article
+            className="wa style-0"
+            data-id="someId"
+            id="someId"
+          >
+            <div
+              className="wa-header has-image"
+            >
+              <div
+                aria-describedby="description-someId"
+                aria-labelledby="title-someId"
+                className="wa-img"
+                role="img"
+                style={
+                  Object {
+                    "backgroundImage": "url('someimage.png')",
+                  }
+                }
+              />
+              <div
+                className="wa-header-content"
+              >
+                <h2
+                  className="wa-title"
+                  id="title-someId"
+                >
+                  Some Title
+                </h2>
+                <h3
+                  className="wa-description"
+                  id="description-someId"
+                >
+                  some description
+                </h3>
+              </div>
+            </div>
+            <div
+              className="wa-content"
+            >
+              <p
+                className="wa-summary"
               >
                 some extract
               </p>
@@ -94,30 +179,30 @@ exports[`WikiArticle should not fetch article data if provided 1`] = `
   }
 >
   <Connect(Component)
+    articleId="someId"
     description="Some description"
-    id="someId"
     summary="Some summary."
     title="Some Title"
   >
     <Connect(Component)
+      articleId="someId"
       description="Some description"
       forwardedRef={null}
-      id="someId"
       summary="Some summary."
       title="Some Title"
     >
       <ForwardRef
+        articleId="someId"
         description="Some description"
         dispatchArticle={[Function]}
-        id="someId"
         summary="Some summary."
         title="Some Title"
       >
         <WikiArticle
+          articleId="someId"
           description="Some description"
           dispatchArticle={[Function]}
           forwardedRef={null}
-          id="someId"
           summary="Some summary."
           title="Some Title"
         >
@@ -148,7 +233,6 @@ exports[`WikiArticle should not fetch article data if provided 1`] = `
             >
               <p
                 className="wa-summary"
-                id="summary-someId"
               >
                 Some summary.
               </p>
