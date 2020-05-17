@@ -112,27 +112,27 @@ const Cylinder = ({ articles: articlesProp = [] }: Props) => {
 	});
 
 	return (
-		<>
-			<div style={{ position: 'absolute', top: 0, left: 0 }}>
-				TEMP PLACEMENT
+		<div className="cylinder">
+			<TransitionGroup
+				className="articles"
+				component="ul"
+				{...(Object.keys(style).length > 0 ? { style } : {})}
+			>
+				{articlesToMount}
+			</TransitionGroup>
+			<div className="cylinder-options">
 				<button
+					className="wr-button add-article"
 					type="button"
 					onClick={appendArticle}
 					disabled={!appendIsEnabled}
 				>
-					Add article
+					<i className="material-icons">
+						{appendIsEnabled ? 'add_circle_outline' : 'hourglass_empty'}
+					</i>
 				</button>
 			</div>
-			<div className="articles-container">
-				<TransitionGroup
-					className="articles"
-					component="ul"
-					{...(Object.keys(style).length > 0 ? { style } : {})}
-				>
-					{articlesToMount}
-				</TransitionGroup>
-			</div>
-		</>
+		</div>
 	);
 };
 

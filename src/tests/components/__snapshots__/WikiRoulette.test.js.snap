@@ -23,25 +23,7 @@ exports[`WikiRoulette renders the app 1`] = `
           articles={Array []}
         >
           <div
-            style={
-              Object {
-                "left": 0,
-                "position": "absolute",
-                "top": 0,
-              }
-            }
-          >
-            TEMP PLACEMENT
-            <button
-              disabled={true}
-              onClick={[Function]}
-              type="button"
-            >
-              Add article
-            </button>
-          </div>
-          <div
-            className="articles-container"
+            className="cylinder"
           >
             <TransitionGroup
               childFactory={[Function]}
@@ -93,6 +75,7 @@ exports[`WikiRoulette renders the app 1`] = `
                           className="active"
                           id="article-0"
                           onArticleLoad={[Function]}
+                          onClick={null}
                         >
                           <Connect(Component)
                             className="active"
@@ -102,6 +85,7 @@ exports[`WikiRoulette renders the app 1`] = `
                                   class="wa style-0 active"
                                   data-id="someId"
                                   id="article-0"
+                                  role="presentation"
                                 >
                                   <div
                                     class="wa-header has-image"
@@ -143,7 +127,11 @@ exports[`WikiRoulette renders the app 1`] = `
                                       rel="noopener noreferrer"
                                       target="_blank"
                                     >
-                                      Test Link
+                                      <i
+                                        class="material-icons"
+                                      >
+                                        link
+                                      </i>
                                     </a>
                                   </div>
                                 </article>,
@@ -151,12 +139,14 @@ exports[`WikiRoulette renders the app 1`] = `
                             }
                             id="article-0"
                             onArticleLoad={[Function]}
+                            onClick={null}
                           >
                             <ForwardRef
                               className="active"
                               dispatchArticle={[Function]}
                               id="article-0"
                               onArticleLoad={[Function]}
+                              onClick={null}
                             >
                               <WikiArticle
                                 className="active"
@@ -167,6 +157,7 @@ exports[`WikiRoulette renders the app 1`] = `
                                       class="wa style-0 active"
                                       data-id="someId"
                                       id="article-0"
+                                      role="presentation"
                                     >
                                       <div
                                         class="wa-header has-image"
@@ -208,7 +199,11 @@ exports[`WikiRoulette renders the app 1`] = `
                                           rel="noopener noreferrer"
                                           target="_blank"
                                         >
-                                          Test Link
+                                          <i
+                                            class="material-icons"
+                                          >
+                                            link
+                                          </i>
                                         </a>
                                       </div>
                                     </article>,
@@ -216,10 +211,13 @@ exports[`WikiRoulette renders the app 1`] = `
                                 }
                                 id="article-0"
                                 onArticleLoad={[Function]}
+                                onClick={null}
                               >
                                 <article
                                   className="wa style-0 loading active"
                                   id="article-0"
+                                  onClick={null}
+                                  role="presentation"
                                 >
                                   <div
                                     className="wa-header"
@@ -235,7 +233,11 @@ exports[`WikiRoulette renders the app 1`] = `
                                       rel="noopener noreferrer"
                                       target="_blank"
                                     >
-                                      Test Link
+                                      <i
+                                        className="material-icons"
+                                      >
+                                        link
+                                      </i>
                                     </a>
                                   </div>
                                 </article>
@@ -249,6 +251,22 @@ exports[`WikiRoulette renders the app 1`] = `
                 </CSSTransition>
               </ul>
             </TransitionGroup>
+            <div
+              className="cylinder-options"
+            >
+              <button
+                className="wr-button add-article"
+                disabled={true}
+                onClick={[Function]}
+                type="button"
+              >
+                <i
+                  className="material-icons"
+                >
+                  hourglass_empty
+                </i>
+              </button>
+            </div>
           </div>
         </Cylinder>
         <ul

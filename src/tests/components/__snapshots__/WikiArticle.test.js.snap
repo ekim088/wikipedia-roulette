@@ -26,6 +26,9 @@ exports[`WikiArticle renders an article and fetches article data from Wikipedia 
           <article
             className="wa style-0"
             data-id="someId"
+            id={null}
+            onClick={null}
+            role="presentation"
           >
             <div
               className="wa-header has-image"
@@ -67,7 +70,11 @@ exports[`WikiArticle renders an article and fetches article data from Wikipedia 
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Test Link
+                <i
+                  className="material-icons"
+                >
+                  link
+                </i>
               </a>
             </div>
           </article>
@@ -110,6 +117,8 @@ exports[`WikiArticle should apply an id and accessibility attributes to article 
             className="wa style-0"
             data-id="someId"
             id="someId"
+            onClick={null}
+            role="presentation"
           >
             <div
               className="wa-header has-image"
@@ -155,7 +164,11 @@ exports[`WikiArticle should apply an id and accessibility attributes to article 
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Test Link
+                <i
+                  className="material-icons"
+                >
+                  link
+                </i>
               </a>
             </div>
           </article>
@@ -209,6 +222,9 @@ exports[`WikiArticle should not fetch article data if provided 1`] = `
           <article
             className="wa style-0"
             data-id="someId"
+            id={null}
+            onClick={null}
+            role="presentation"
           >
             <div
               className="wa-header"
@@ -240,7 +256,11 @@ exports[`WikiArticle should not fetch article data if provided 1`] = `
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Test Link
+                <i
+                  className="material-icons"
+                >
+                  link
+                </i>
               </a>
             </div>
           </article>

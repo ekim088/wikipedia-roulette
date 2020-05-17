@@ -13,8 +13,11 @@ $font-header-3-size: 14px;
 $font-header-3-weight: 600;
 
 // containers
-$border-radius: 10px !default;
+$button-border-radius: 4px;
+$button-padding: 0;
 
+$article-border-radius: 10px !default;
+$article-image-border-radius: 50%;
 $article-image-margin: 10px;
 $article-image-size: 60px;
 $article-padding: 20px;

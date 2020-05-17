@@ -1,43 +1,109 @@
 @import 'variables';
 
-.articles {
-	position: absolute;
-	width: $article-width;
-	margin: 0 auto;
-	padding: 0;
-	transition: transform $transition-duration $transition-timing;
-
-	li {
-		margin: 0 0 40px 0;
-		list-style-type: none;
-
-		&:last-child {
-			margin-bottom: 0;
-		}
-	}
-}
-
-.articles-container {
+.cylinder {
+	height: $article-height;
+	left: 50%;
 	position: relative;
 	top: 50%;
-	left: 50%;
-	width: $article-width;
-	height: $article-height;
 	transform: translate(-50%, -50%);
-}
+	width: $article-width;
 
-.articles {
+	.articles {
+		margin: 0 auto;
+		padding: 0;
+		position: absolute;
+		transition: transform $transition-duration $transition-timing;
+		width: $article-width;
+
+		li {
+			list-style-type: none;
+			margin: 0 0 40px 0;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+
 	.wa {
-		transform: translateY(10px) scale(0.95);
 		opacity: 0;
+		transform: translateY(10px) scale(0.95);
+
+		&:not(.active) {
+			cursor: pointer;
+
+			.wa-img:hover {
+				border-radius: $article-image-border-radius;
+				transform: translateY(-50%);
+			}
+		}
 	}
 
 	.articles-item-enter-done .wa {
-		transform: translateY(0) scale(1);
 		opacity: 0.3;
+		transform: translateY(0) scale(1);
 
 		&.active {
 			opacity: 1;
 		}
 	}
+}
+
+.cylinder-options {
+	border-radius: 10px;
+	bottom: 0;
+	opacity: 0.8;
+	padding: 20px 10px;
+	position: absolute;
+	right: -80px;
+	text-align: center;
+	//background-color: $color-base-secondary;
+	transition: opacity $transition-duration $transition-timing;
+	z-index: 10;
+
+	&:hover {
+		opacity: 1;
+	}
+
+	.wr-button {
+		margin: 0 0 10px 0;
+		text-align: left;
+	}
+}
+
+.wr-trigger {
+	overflow: hidden;
+	padding: 5px;
+
+	button {
+		background: $color-highlight-1-secondary;
+		border: none;
+		border-radius: $button-border-radius;
+		color: $color-highlight-1-primary;
+		cursor: pointer;
+		display: block;
+		float: right;
+		margin: 0 0 10px 0;
+		overflow: hidden;
+		padding: 5px 10px;
+		text-align: left;
+		transition: all $transition-duration $transition-timing;
+	}
+
+	span {
+		display: block;
+	}
+}
+
+.trigger-title {
+	font-size: 16px;
+	font-weight: $font-header-2-weight;
+	line-height: 1;
+}
+
+.trigger-description {
+	font-size: 13px;
+	font-weight: $font-header-3-weight;
+	line-height: 1;
+	margin-top: 3px;
 }

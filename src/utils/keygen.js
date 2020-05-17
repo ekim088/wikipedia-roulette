@@ -18,11 +18,13 @@ export const storeKey = (key: string) => {
  * @returns {string} A key.
  */
 export const generateKey = (): string => {
+	let attempts = 0;
 	let key;
 
 	do {
 		key = `${Math.round(Math.random() * 100000)}`;
-	} while (keys.indexOf(key) > -1);
+		attempts += 1;
+	} while (keys.indexOf(key) > -1 && attempts < 10);
 
 	storeKey(key);
 	return key;

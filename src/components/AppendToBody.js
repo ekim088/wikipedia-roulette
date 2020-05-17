@@ -5,7 +5,8 @@ import ReactDOM from 'react-dom';
 
 type Props = {
 	children: React.Node,
-	containerSelector?: string
+	containerSelector?: string,
+	prepend?: boolean
 };
 
 /**
@@ -15,7 +16,7 @@ type Props = {
  * 	<MyComponentToAppend />
  * </AppendToBody>
  */
-const AppendToBody = ({ children, containerSelector }: Props) => {
+const AppendToBody = ({ children, containerSelector, prepend }: Props) => {
 	const el = document.createElement('div');
 
 	// safeguard to make sure container <div> does not affect layout
@@ -27,7 +28,11 @@ const AppendToBody = ({ children, containerSelector }: Props) => {
 		const container = customContainer || document.body;
 
 		if (container) {
-			container.appendChild(el);
+			if (prepend) {
+				container.prepend(el);
+			} else {
+				container.append(el);
+			}
 		}
 
 		return () => {
@@ -35,13 +40,14 @@ const AppendToBody = ({ children, containerSelector }: Props) => {
 				container.removeChild(el);
 			}
 		};
-	}, [el, containerSelector]);
+	}, [el, containerSelector, prepend]);
 
 	return ReactDOM.createPortal(children, el);
 };
 
 AppendToBody.defaultProps = {
-	containerSelector: ''
+	containerSelector: '',
+	prepend: false
 };
 
 export default AppendToBody;

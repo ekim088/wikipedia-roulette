@@ -1,35 +1,34 @@
 @import 'variables';
 
 .wa {
-	position: relative;
-	width: $article-width;
-	min-height: $article-height;
+	background-color: $color-base-secondary;
+	border-radius: $article-border-radius;
+	color: $color-base-primary;
 	margin: 0 auto;
 	padding: $article-padding;
-	border-radius: $border-radius;
-	color: $color-base-primary;
-	background-color: $color-base-secondary;
+	position: relative;
 	transition: all $transition-duration $transition-timing;
+	width: $article-width;
 
 	&.style-0 {
-		color: $color-highlight-1-primary;
 		background-color: $color-highlight-1-secondary;
+		color: $color-highlight-1-primary;
 	}
 
 	&.style-1 {
-		color: $color-highlight-2-primary;
 		background-color: $color-highlight-2-secondary;
+		color: $color-highlight-2-primary;
 	}
 
 	&.style-2 {
-		color: $color-highlight-3-primary;
 		background-color: $color-highlight-3-secondary;
+		color: $color-highlight-3-primary;
 	}
 }
 
 .wa-header {
-	position: relative;
 	min-height: $article-image-size;
+	position: relative;
 
 	&.has-image {
 		padding-left: $article-image-size + $article-image-margin;
@@ -37,16 +36,16 @@
 }
 
 .wa-img {
-	position: absolute;
-	z-index: 1;
-	top: 50%;
-	left: 0;
-	width: $article-image-size;
-	height: $article-image-size;
-	border-radius: 50%;
 	background: center 5% / cover no-repeat #194ba6;
-	transition: all $transition-duration $transition-timing;
+	border-radius: $article-image-border-radius;
+	height: $article-image-size;
+	left: 0;
+	position: absolute;
+	top: 50%;
 	transform: translateY(-50%);
+	transition: all $transition-duration $transition-timing;
+	width: $article-image-size;
+	z-index: 1;
 
 	&:hover {
 		border-radius: 2px;
@@ -55,9 +54,9 @@
 }
 
 .wa-header-content {
+	left: 0;
 	position: absolute;
 	top: 50%;
-	left: 0;
 	transform: translateY(-50%);
 
 	.has-image & {
@@ -66,18 +65,18 @@
 }
 
 .wa-title {
-	margin: 0;
-	padding: 0;
 	font-size: $font-header-2-size;
 	font-weight: $font-header-2-weight;
 	line-height: $font-header-2-line-height;
+	margin: 0;
+	padding: 0;
 }
 
 .wa-description {
-	margin: 0;
-	padding: 0;
 	font-size: $font-header-3-size;
 	font-weight: $font-header-3-weight;
+	margin: 0;
+	padding: 0;
 
 	.wa-title + & {
 		margin-top: 2px;

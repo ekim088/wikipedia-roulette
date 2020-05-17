@@ -57,14 +57,17 @@ const MountedArticle = ({ isActive, ...rest }: Props) => {
 					if (onArticleLoad) onArticleLoad(data);
 					updateArticleData(data);
 				}}
+				onClick={!isActive ? spinIntoView : null}
 				ref={articleRef}
 			/>
 			{title && description && (
-				<AppendToBody containerSelector="#shortcuts">
-					<button type="button" onClick={spinIntoView}>
-						<span>{title}</span>
-						<span>{description}</span>
-					</button>
+				<AppendToBody containerSelector="#shortcuts" prepend>
+					<div className="wr-trigger">
+						<button type="button" onClick={spinIntoView}>
+							<span className="trigger-title">{title}</span>
+							<span className="trigger-description">{description}</span>
+						</button>
+					</div>
 				</AppendToBody>
 			)}
 		</>

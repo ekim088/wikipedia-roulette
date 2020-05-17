@@ -26,7 +26,8 @@ export type Props = {
 	dispatchArticle?: Article => void,
 	forwardedRef?: React.ElementRef<any>,
 	id?: string,
-	onArticleLoad?: Article => void
+	onArticleLoad?: Article => void,
+	onClick?: Event => void
 };
 
 type State = {
@@ -65,7 +66,8 @@ class WikiArticle extends Component<Props, State> {
 		forwardedRef: null,
 		id: undefined,
 		image: undefined,
-		onArticleLoad: undefined
+		onArticleLoad: undefined,
+		onClick: undefined
 	};
 
 	constructor(props: Props) {
@@ -139,7 +141,7 @@ class WikiArticle extends Component<Props, State> {
 	}
 
 	render() {
-		const { className, forwardedRef, id } = this.props;
+		const { className, forwardedRef, id, onClick } = this.props;
 		const {
 			articleId,
 			description,
@@ -169,8 +171,10 @@ class WikiArticle extends Component<Props, State> {
 			<article
 				className={articleClasses}
 				data-id={articleId}
+				id={id || null}
+				onClick={onClick || null}
 				ref={forwardedRef}
-				{...(id ? { id } : {})}
+				role="presentation"
 			>
 				<div className={`wa-header${image ? ' has-image' : ''}`}>
 					{image && (
@@ -200,7 +204,7 @@ class WikiArticle extends Component<Props, State> {
 				<div className="wa-content">
 					{summary && <p className="wa-summary">{trim(summary, 250)}</p>}
 					<a href={externalUrl} target="_blank" rel="noopener noreferrer">
-						Test Link
+						<i className="material-icons">link</i>
 					</a>
 				</div>
 			</article>
